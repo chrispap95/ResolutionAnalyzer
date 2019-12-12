@@ -62,10 +62,8 @@ int main(int argc, char** argv){
     std::string digifilePath;
     unsigned nRuns;
     std::string recoFileName;
-    std::string MLFilePath;
     unsigned debug;
     double deadfrac;
-    bool adjacent, MLsample;
     po::options_description preconfig("Configuration");
     preconfig.add_options()("cfg,c",po::value<std::string>(&cfg)->required());
     po::variables_map vm;
@@ -83,11 +81,6 @@ int main(int argc, char** argv){
     ("deadfrac",        po::value<double>(&deadfrac)->default_value(0))
     //Restrict number of adjacent dead cells
     ("adjacent",        po::value<bool>(&adjacent)->default_value(0))
-    //Generate ML study training sample
-    ("MLsample",        po::value<bool>(&MLsample)->default_value(1))
-    //File to export data for ML
-    ("MLFilePath",      po::value<std::string>(&MLFilePath)->default_value("training_sample.root"))
-
     ;
     po::store(po::command_line_parser(argc, argv).options(config).allow_unregistered().run(), vm);
     po::store(po::parse_config_file<char>(cfg.c_str(), config), vm);
@@ -155,58 +148,6 @@ int main(int argc, char** argv){
     TH1F* h_rechitsumave = new TH1F("h_rechitsumave","Sum energy average method;E[GeV]",100,0,20.);
 
     /**********************************
-    ** ML Study output section
-    **     - MLlayer is dead cell layer
-    **     - MLeta is gen eta
-    **     - MLphi is gen phi
-    **     - MLni is ith dead cell neighbor
-    **     - MLuni is 6 neighbors at layer+1
-    **     - MLdni is 6 neighbors at layer-1
-    **     - MLdead is dead cell rechit
-    ** We also need to create a ?set? container to store the values before writing to TTree
-    **********************************/
-    TFile* fout = new TFile(MLFilePath.c_str(),"RECREATE");
-    float MLlayer,MLcellid, MLeta, MLphi, MLdead, MLnup, MLndown, MLevent;
-    float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6;
-    float MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6;
-    float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6;
-    float MLrechitsum;
-    TTree* t1 = new TTree("t1","sample");
-    t1->Branch("MLlayer",&MLlayer,"MLlayer/F");
-    t1->Branch("MLcellid",&MLcellid,"MLcellid/F");
-    t1->Branch("MLeta",&MLeta,"MLeta/F");
-    t1->Branch("MLphi",&MLphi,"MLphi/F");
-    t1->Branch("MLn1",&MLn1,"MLn1/F");
-    t1->Branch("MLn2",&MLn2,"MLn2/F");
-    t1->Branch("MLn3",&MLn3,"MLn3/F");
-    t1->Branch("MLn4",&MLn4,"MLn4/F");
-    t1->Branch("MLn5",&MLn5,"MLn5/F");
-    t1->Branch("MLn6",&MLn6,"MLn6/F");
-    t1->Branch("MLdead",&MLdead,"MLdead/F");
-    t1->Branch("MLnup",&MLnup,"MLnup/F");
-    t1->Branch("MLndown",&MLndown,"MLndown/F");
-    t1->Branch("MLun1",&MLun1,"MLun1/F");
-    t1->Branch("MLun2",&MLun2,"MLun2/F");
-    t1->Branch("MLun3",&MLun3,"MLun3/F");
-    t1->Branch("MLun4",&MLun4,"MLun4/F");
-    t1->Branch("MLun5",&MLun5,"MLun5/F");
-    t1->Branch("MLun6",&MLun6,"MLun6/F");
-    t1->Branch("MLdn1",&MLdn1,"MLdn1/F");
-    t1->Branch("MLdn2",&MLdn2,"MLdn2/F");
-    t1->Branch("MLdn3",&MLdn3,"MLdn3/F");
-    t1->Branch("MLdn4",&MLdn4,"MLdn4/F");
-    t1->Branch("MLdn5",&MLdn5,"MLdn5/F");
-    t1->Branch("MLdn6",&MLdn6,"MLdn6/F");
-    t1->Branch("MLevent",&MLevent,"MLevent/F");
-    t1->Branch("MLrechitsum",&MLrechitsum,"MLrechitsum/F");
-
-    /*
-    ** Define a vector of the array:
-    ** {dead cell(dc) layer, dc id, dc eta, dc phi, MLn1, MLn2, MLn3, MLn4, MLn5, MLn6, dc rechit}
-    */
-    std::vector<std::array<float, 26>> MLvectorev;
-
-    /**********************************
     ** for missing channel study
     **********************************/
     // SILICON
@@ -237,11 +178,6 @@ int main(int argc, char** argv){
                                     cellU,
                                     cellV
                                 ));
-                                std::array<float, 26> temp_vector;
-                                for(unsigned k(0); k < 26; ++k) temp_vector[k] = 0;
-                                temp_vector[0] = (float)(*itr).first; //layer
-                                temp_vector[1] = (float)(*itr).second; //dead cell's id
-                                MLvectorev.push_back(temp_vector);
                             }
                         //}
                     }
