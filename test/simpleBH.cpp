@@ -64,6 +64,7 @@ int main(int argc, char** argv){
     std::string recoFileName;
     unsigned debug;
     double deadfrac;
+    bool adjacent;
     po::options_description preconfig("Configuration");
     preconfig.add_options()("cfg,c",po::value<std::string>(&cfg)->required());
     po::variables_map vm;
