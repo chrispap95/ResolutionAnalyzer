@@ -6,7 +6,7 @@ Works on ```CMSSW_10_6_*```. Setup an environment and clone into ```$CMSSW_BASE/
 Then, do
 ```bash
 mkdir {bin,lib,obj}
-sh setup.sh
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:`pwd`/lib
 make
 ```
 
