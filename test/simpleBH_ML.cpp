@@ -56,24 +56,24 @@ std::vector<std::tuple<unsigned, int, int, unsigned, unsigned>> getNeighbors(
     // Find same-layer neighboring cells
     // cell ( 0,-1) wrt given
     std::tuple<unsigned, int, int, unsigned, unsigned> n1 = deadCell;
-    std::get<4> -= 1;
+    std::get<4>n1 -= 1;
     // cell (-1,-1) wrt given
     std::tuple<unsigned, int, int, unsigned, unsigned> n2 = deadCell;
-    std::get<3> -= 1;
-    std::get<4> -= 1;
+    std::get<3>n2 -= 1;
+    std::get<4>n2 -= 1;
     // cell (-1, 0) wrt given
     std::tuple<unsigned, int, int, unsigned, unsigned> n3 = deadCell;
-    std::get<3> -= 1;
+    std::get<3>n3 -= 1;
     // cell ( 0,+1) wrt given
     std::tuple<unsigned, int, int, unsigned, unsigned> n4 = deadCell;
-    std::get<4> += 1;
+    std::get<4>n4 += 1;
     // cell (+1, 0) wrt given
     std::tuple<unsigned, int, int, unsigned, unsigned> n5 = deadCell;
-    std::get<3> += 1;
+    std::get<3>n5 += 1;
     // cell (+1,+1) wrt given
     std::tuple<unsigned, int, int, unsigned, unsigned> n6 = deadCell;
-    std::get<3> += 1;
-    std::get<4> += 1;
+    std::get<3>n6 += 1;
+    std::get<4>n6 += 1;
 
     // Check boundary conditions and make transitions between wafers when on the edge
     // For n1
