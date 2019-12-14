@@ -328,7 +328,7 @@ int main(int argc, char** argv){
 
     // Define average energy in layers plus and minus 1
     std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>> adj_to_dead;
-    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned, int, int, unsigned, unsigned>> adj_to_dead_inlay;
+    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>> adj_to_dead_inlay;
 
     // Kill cells and calculate statistics on adjacent dead cells
     unsigned N_try_success = 0; // Number of killed cells
@@ -383,11 +383,7 @@ int main(int argc, char** argv){
                                     std::get<1>(*itr),
                                     std::get<2>(*itr),
                                     std::get<3>(*itr),
-                                    std::get<4>(*itr),
-                                    waferU,
-                                    waferV,
-                                    cellU,
-                                    cellV
+                                    std::get<4>(*itr)
                                 );
                             }
 
@@ -626,9 +622,6 @@ int main(int argc, char** argv){
 
                 if(itrU!=adj_to_dead.end()) {
                     rechitsumlaypn += lenergy/2;
-                    /* ML code
-                    ** Input dead cells eta, phi and rechits
-                    */
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer-1 &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
@@ -640,9 +633,6 @@ int main(int argc, char** argv){
                 }
                 if(itrD!=adj_to_dead.end()) {
                     rechitsumlaypn += lenergy/2;
-                    /* ML code
-                    ** Input dead cells eta, phi and rechits
-                    */
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer+1 &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
@@ -661,27 +651,21 @@ int main(int argc, char** argv){
                     );
                     std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
                     if(itrNn!=adj_to_dead_inlay.end()) {
+                        std::vector<std::tuple<unsigned,int,int,unsigned,unsigned>> sameLayerNeighbors;
+                        sameLayerNeighbors = getNeighbors(tempsi);
+                        // Get neighbor number
+                        unsigned nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, unsigned, unsigned> deadCell;
+                        std::get<0>deadCell = std::get<1>(sameLayerNeighbors[nn]);
+                        std::get<1>deadCell = std::get<2>(sameLayerNeighbors[nn]);
+                        std::get<2>deadCell = std::get<3>(sameLayerNeighbors[nn]);
+                        std::get<3>deadCell = std::get<4>(sameLayerNeighbors[nn]);
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
-                                (*itr)[1] == waferU && (*itr)[2] == waferV &&
-                                (*itr)[3] == cellU  && (*itr)[4] == cellV
+                                (*itr)[1] == std::get<0>deadCell && (*itr)[2] == std::get<1>deadCell &&
+                                (*itr)[3] == std::get<2>deadCell && (*itr)[4] == std::get<3>deadCell
                             ){
                                 (*itr)[n+7] = lenergy;
-                            }
-                        }
-                    }
-                    // Previous layer neighbors
-                    std::tuple<unsigned, unsigned, int, int, unsigned, unsigned> tempsiDNn(
-                        n,layer,waferU,waferV,cellU,cellV
-                    );
-                    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
-                    if(itrDNn!=adj_to_dead_inlay.end()) {
-                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
-                            if( (*itr)[0] == layer &&
-                                (*itr)[1] == waferU && (*itr)[2] == waferV &&
-                                (*itr)[3] == cellU  && (*itr)[4] == cellV
-                            ){
-                                (*itr)[n+22] = lenergy;
                             }
                         }
                     }
@@ -691,12 +675,45 @@ int main(int argc, char** argv){
                     );
                     std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
                     if(itrUNn!=adj_to_dead_inlay.end()) {
+                        std::vector<std::tuple<unsigned,int,int,unsigned,unsigned>> sameLayerNeighbors;
+                        sameLayerNeighbors = getNeighbors(tempsi);
+                        // Get neighbor number
+                        unsigned nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, unsigned, unsigned> deadCell;
+                        std::get<0>deadCell = std::get<1>(nextLayerNeighbors[nn]);
+                        std::get<1>deadCell = std::get<2>(nextLayerNeighbors[nn]);
+                        std::get<2>deadCell = std::get<3>(nextLayerNeighbors[nn]);
+                        std::get<3>deadCell = std::get<4>(nextLayerNeighbors[nn]);
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
-                            if( (*itr)[0] == layer &&
-                                (*itr)[1] == waferU && (*itr)[2] == waferV &&
-                                (*itr)[3] == cellU  && (*itr)[4] == cellV
+                            if( (*itr)[0] == layer-1 &&
+                            (*itr)[1] == std::get<0>deadCell && (*itr)[2] == std::get<1>deadCell &&
+                            (*itr)[3] == std::get<2>deadCell && (*itr)[4] == std::get<3>deadCell
                             ){
                                 (*itr)[n+16] = lenergy;
+                            }
+                        }
+                    }
+                    // Previous layer neighbors
+                    std::tuple<unsigned, unsigned, int, int, unsigned, unsigned> tempsiDNn(
+                        n,layer,waferU,waferV,cellU,cellV
+                    );
+                    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
+                    if(itrDNn!=adj_to_dead_inlay.end()) {
+                        std::vector<std::tuple<unsigned,int,int,unsigned,unsigned>> sameLayerNeighbors;
+                        prevLayerNeighbors = getNeighbors(tempsi);
+                        // Get neighbor number
+                        unsigned nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, unsigned, unsigned> deadCell;
+                        std::get<0>deadCell = std::get<1>(prevLayerNeighbors[nn]);
+                        std::get<1>deadCell = std::get<2>(prevLayerNeighbors[nn]);
+                        std::get<2>deadCell = std::get<3>(prevLayerNeighbors[nn]);
+                        std::get<3>deadCell = std::get<4>(prevLayerNeighbors[nn]);
+                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                            if( (*itr)[0] == layer+1 &&
+                            (*itr)[1] == std::get<0>deadCell && (*itr)[2] == std::get<1>deadCell &&
+                            (*itr)[3] == std::get<2>deadCell && (*itr)[4] == std::get<3>deadCell
+                            ){
+                                (*itr)[n+22] = lenergy;
                             }
                         }
                     }
