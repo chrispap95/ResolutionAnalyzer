@@ -389,7 +389,7 @@ int main(int argc, char** argv){
 
                             std::array<float, 30> temp_vector;
                             for(unsigned k(0); k < 30; ++k) temp_vector[k] = 0;
-                            temp_vector[0] = (float)waferU; //layer
+                            temp_vector[0] = (float)lr; //layer
                             temp_vector[1] = (float)waferU; //dead cell's waferU
                             temp_vector[2] = (float)waferV; //dead cell's waferV
                             temp_vector[3] = (float)cellU;  //dead cell's cellU
@@ -595,6 +595,7 @@ int main(int argc, char** argv){
                     /* ML code
                     ** Input dead cells eta, phi and rechits
                     */
+                    std::cout << "Debug!!!" << std::endl;
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
