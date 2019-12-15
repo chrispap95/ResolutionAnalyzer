@@ -266,7 +266,6 @@ int main(int argc, char** argv){
     **     - MLdead is dead cell rechit
     ** We also need to create a ?set? container to store the values before writing to TTree
     **********************************/
-    TFile* fout = new TFile(MLFilePath.c_str(),"RECREATE");
     float MLlayer, MLeta, MLphi, MLdead, MLnup, MLndown, MLevent;
     float MLwaferU, MLwaferV, MLcellU, MLcellV;
     float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6;
@@ -657,10 +656,10 @@ int main(int argc, char** argv){
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
-                        std::get<0>deadCell = std::get<1>(sameLayerNeighbors[nn]);
-                        std::get<1>deadCell = std::get<2>(sameLayerNeighbors[nn]);
-                        std::get<2>deadCell = std::get<3>(sameLayerNeighbors[nn]);
-                        std::get<3>deadCell = std::get<4>(sameLayerNeighbors[nn]);
+                        std::get<0>(deadCell) = std::get<1>(sameLayerNeighbors[nn]);
+                        std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
+                        std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
+                        std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
@@ -681,10 +680,10 @@ int main(int argc, char** argv){
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
-                        std::get<0>deadCell = std::get<1>(nextLayerNeighbors[nn]);
-                        std::get<1>deadCell = std::get<2>(nextLayerNeighbors[nn]);
-                        std::get<2>deadCell = std::get<3>(nextLayerNeighbors[nn]);
-                        std::get<3>deadCell = std::get<4>(nextLayerNeighbors[nn]);
+                        std::get<0>(deadCell) = std::get<1>(nextLayerNeighbors[nn]);
+                        std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
+                        std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
+                        std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer-1 &&
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
@@ -705,10 +704,10 @@ int main(int argc, char** argv){
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
-                        std::get<0>deadCell = std::get<1>(prevLayerNeighbors[nn]);
-                        std::get<1>deadCell = std::get<2>(prevLayerNeighbors[nn]);
-                        std::get<2>deadCell = std::get<3>(prevLayerNeighbors[nn]);
-                        std::get<3>deadCell = std::get<4>(prevLayerNeighbors[nn]);
+                        std::get<0>(deadCell) = std::get<1>(prevLayerNeighbors[nn]);
+                        std::get<1>(deadCell) = std::get<2>(prevLayerNeighbors[nn]);
+                        std::get<2>(deadCell) = std::get<3>(prevLayerNeighbors[nn]);
+                        std::get<3>(deadCell) = std::get<4>(prevLayerNeighbors[nn]);
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer+1 &&
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
