@@ -675,8 +675,8 @@ int main(int argc, char** argv){
                     );
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
                     if(itrUNn!=adj_to_dead_inlay.end()) {
-                        std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
-                        sameLayerNeighbors = getNeighbors(tempsi);
+                        std::vector<std::tuple<int,int,int,int,int>> nextLayerNeighbors;
+                        nextLayerNeighbors = getNeighbors(tempsi);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
@@ -699,7 +699,7 @@ int main(int argc, char** argv){
                     );
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
                     if(itrDNn!=adj_to_dead_inlay.end()) {
-                        std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
+                        std::vector<std::tuple<int,int,int,int,int>> prevLayerNeighbors;
                         prevLayerNeighbors = getNeighbors(tempsi);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
