@@ -626,8 +626,6 @@ int main(int argc, char** argv){
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
-                            //std::cout << "Debug!!! Event:" << ievt << "\t"
-                            //<< lenergy << std::endl;
                             (*itr)[14] = lenergy;
                         }
                     }
@@ -661,6 +659,7 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
+                        std::cout << "Debug: " << lenergy << std::endl;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
@@ -726,7 +725,6 @@ int main(int argc, char** argv){
         h_rechitsumave->Fill(rechitsumave);
         h_rechitsum->Fill(rechitsum);
         h_rechitsumdead_Si->Fill(rechitsumdead_Si);
-        //std::cout << "Debug: " << MLrechitsum << std::endl;
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
