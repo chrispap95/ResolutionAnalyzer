@@ -727,6 +727,7 @@ int main(int argc, char** argv){
         h_rechitsumave->Fill(rechitsumave);
         h_rechitsum->Fill(rechitsum);
         h_rechitsumdead_Si->Fill(rechitsumdead_Si);
+        std::cout << "Debug: " << MLrechitsum << std::endl;
         MLrechitsum = rechitsumdead_Si;
 
         //Export the ML dataset values to the TTree
