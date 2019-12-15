@@ -627,8 +627,8 @@ int main(int argc, char** argv){
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
-                            std::cout << "Debug!!! Event:" << ievt << "\t"
-                            << lenergy << std::endl;
+                            //std::cout << "Debug!!! Event:" << ievt << "\t"
+                            //<< lenergy << std::endl;
                             (*itr)[14] = lenergy;
                         }
                     }
@@ -731,9 +731,9 @@ int main(int argc, char** argv){
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
-            //if ((*itr)[5] > 0) {
+            if ((*itr)[5] > 0) {
                 /* This condition is necessary to ensure the cell was within
-                ** the 53 mm cone.
+                ** the cone.
                 */
                 MLlayer  = (*itr)[0];
                 MLwaferU = (*itr)[1];
@@ -765,7 +765,7 @@ int main(int argc, char** argv){
                 MLdn6    = (*itr)[28];
                 MLevent  = (*itr)[29];
                 t1->Fill();
-            //}
+            }
         }
         ievtRec++;
     }
