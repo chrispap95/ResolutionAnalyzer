@@ -728,7 +728,6 @@ int main(int argc, char** argv){
         h_rechitsum->Fill(rechitsum);
         h_rechitsumdead_Si->Fill(rechitsumdead_Si);
         std::cout << "Debug: " << MLrechitsum << std::endl;
-        MLrechitsum = rechitsumdead_Si;
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
@@ -765,6 +764,7 @@ int main(int argc, char** argv){
                 MLdn5    = (*itr)[27];
                 MLdn6    = (*itr)[28];
                 MLevent  = (*itr)[29];
+                MLrechitsum = rechitsumdead_Si;
                 t1->Fill();
             }
         }
