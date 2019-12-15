@@ -727,10 +727,11 @@ int main(int argc, char** argv){
         h_rechitsumave->Fill(rechitsumave);
         h_rechitsum->Fill(rechitsum);
         h_rechitsumdead_Si->Fill(rechitsumdead_Si);
+        MLrechitsum = rechitsumdead_Si;
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
-            if ((*itr)[5] > 0) {
+            //if ((*itr)[5] > 0) {
                 /* This condition is necessary to ensure the cell was within
                 ** the 53 mm cone.
                 */
@@ -764,7 +765,7 @@ int main(int argc, char** argv){
                 MLdn6    = (*itr)[28];
                 MLevent  = (*itr)[29];
                 t1->Fill();
-            }
+            //}
         }
         ievtRec++;
     }
