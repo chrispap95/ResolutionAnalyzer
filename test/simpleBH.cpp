@@ -612,10 +612,10 @@ int main(int argc, char** argv){
                 ** First, check if the cell is in a neighbors list
                 */
                 std::tuple<int, int, int, int, int, int> tempsiU(
-                    0,layer,waferU,waferV,cellU,cellV
+                    1,layer,waferU,waferV,cellU,cellV
                 );
                 std::tuple<int, int, int, int, int, int> tempsiD(
-                    1,layer,waferU,waferV,cellU,cellV
+                    0,layer,waferU,waferV,cellU,cellV
                 );
                 std::set<std::tuple<int, int, int, int, int, int>>::iterator itrU=adj_to_dead.find(tempsiU);
                 std::set<std::tuple<int, int, int, int, int, int>>::iterator itrD=adj_to_dead.find(tempsiD);
@@ -627,7 +627,7 @@ int main(int argc, char** argv){
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
-                            std::cout << "Debug!!! Event:" << ievt << "\t" 
+                            std::cout << "Debug!!! Event:" << ievt << "\t"
                             << lenergy << std::endl;
                             (*itr)[14] = lenergy;
                         }
