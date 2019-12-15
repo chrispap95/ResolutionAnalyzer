@@ -386,6 +386,7 @@ int main(int argc, char** argv){
                                     std::get<4>(*itr)
                                 });
                                 iN++;
+                                std::cout << "Debug: " << iN << std::endl;
                             }
 
                             std::array<float, 30> temp_vector;
