@@ -553,7 +553,6 @@ int main(int argc, char** argv){
         double rechitsum = 0;
         double rechitsumdead_Si = 0;
         double rechitsumlaypn = 0;
-        double MLrechitsum = 0;
 
         // Loop over hits of event
         for (unsigned iH(0); iH<(*rechitEnergy).size(); ++iH){
@@ -764,7 +763,7 @@ int main(int argc, char** argv){
                 MLdn5    = (*itr)[27];
                 MLdn6    = (*itr)[28];
                 MLevent  = (*itr)[29];
-                MLrechitsum = (float)rechitsumdead_Si;
+                MLrechitsum = rechitsumdead_Si;
                 t1->Fill();
             }
         }
