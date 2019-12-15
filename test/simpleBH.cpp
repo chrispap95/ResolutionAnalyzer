@@ -267,7 +267,8 @@ int main(int argc, char** argv){
     ** We also need to create a ?set? container to store the values before writing to TTree
     **********************************/
     TFile* fout = new TFile(MLFilePath.c_str(),"RECREATE");
-    float MLlayer,MLcellid, MLeta, MLphi, MLdead, MLnup, MLndown, MLevent;
+    float MLlayer, MLeta, MLphi, MLdead, MLnup, MLndown, MLevent;
+    float MLwaferU, MLwaferV, MLcellU, MLcellV;
     float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6;
     float MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6;
     float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6;
@@ -376,7 +377,7 @@ int main(int argc, char** argv){
                             std::vector<std::tuple<int,int,int,int,int>> inLayerNeighbors;
                             inLayerNeighbors = getNeighbors(deadCell);
                             int iN = 0;
-                            for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); +=itr){
+                            for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); ++itr){
                                 adj_to_dead_inlay.insert(
                                     iN,
                                     std::get<0>(*itr),
