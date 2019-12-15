@@ -378,14 +378,14 @@ int main(int argc, char** argv){
                             inLayerNeighbors = getNeighbors(deadCell);
                             int iN = 0;
                             for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); ++itr){
-                                adj_to_dead_inlay.insert(
+                                adj_to_dead_inlay.insert({
                                     iN,
                                     std::get<0>(*itr),
                                     std::get<1>(*itr),
                                     std::get<2>(*itr),
                                     std::get<3>(*itr),
                                     std::get<4>(*itr)
-                                );
+                                });
                             }
 
                             std::array<float, 30> temp_vector;
