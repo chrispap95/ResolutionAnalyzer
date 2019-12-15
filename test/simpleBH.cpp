@@ -601,7 +601,7 @@ int main(int argc, char** argv){
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
                             std::cout << "Debug!!! Event:" << ievt << "  Wafer:" << waferU
-                            << ", " << waferV << "\t" << leta  << ", " << lphi << ", "
+                            << ", " << waferV << "\t" << leta  << "\t, \t" << lphi << "\t, \t"
                             << lenergy << std::endl;
                             (*itr)[5] = leta;
                             (*itr)[6] = lphi;
