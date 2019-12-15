@@ -157,7 +157,7 @@ int main(int argc, char** argv){
 
     //Input output and config options
     std::string cfg;
-    int pNevts;
+    unsigned pNevts;
     std::string outFilePath;
     std::string filePath;
     std::string digifilePath;
