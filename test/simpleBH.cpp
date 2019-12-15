@@ -49,29 +49,29 @@ double DeltaR(double eta1,double phi1,double eta2,double phi2){
     return dr;
 }
 
-std::vector<std::tuple<unsigned, int, int, unsigned, unsigned>> getNeighbors(
-    std::tuple<unsigned, int, int, unsigned, unsigned> deadCell)
+std::vector<std::tuple<int, int, int, int, int>> getNeighbors(
+    std::tuple<int, int, int, int, int> deadCell)
 {
-    std::vector<std::tuple<unsigned, int, int, unsigned, unsigned>> neighbors;
+    std::vector<std::tuple<int, int, int, int, int>> neighbors;
     // Find same-layer neighboring cells
     // cell ( 0,-1) wrt given
-    std::tuple<unsigned, int, int, unsigned, unsigned> n1(deadCell);
+    std::tuple<int, int, int, int, int> n1(deadCell);
     std::get<4>(n1) -= 1;
     // cell (-1,-1) wrt given
-    std::tuple<unsigned, int, int, unsigned, unsigned> n2(deadCell);
+    std::tuple<int, int, int, int, int> n2(deadCell);
     std::get<3>(n2) -= 1;
     std::get<4>(n2) -= 1;
     // cell (-1, 0) wrt given
-    std::tuple<unsigned, int, int, unsigned, unsigned> n3(deadCell);
+    std::tuple<int, int, int, int, int> n3(deadCell);
     std::get<3>(n3) -= 1;
     // cell ( 0,+1) wrt given
-    std::tuple<unsigned, int, int, unsigned, unsigned> n4(deadCell);
+    std::tuple<int, int, int, int, int> n4(deadCell);
     std::get<4>(n4) += 1;
     // cell (+1, 0) wrt given
-    std::tuple<unsigned, int, int, unsigned, unsigned> n5(deadCell);
+    std::tuple<int, int, int, int, int> n5(deadCell);
     std::get<3>(n5) += 1;
     // cell (+1,+1) wrt given
-    std::tuple<unsigned, int, int, unsigned, unsigned> n6(deadCell);
+    std::tuple<int, int, int, int, int> n6(deadCell);
     std::get<3>(n6) += 1;
     std::get<4>(n6) += 1;
 
@@ -157,7 +157,7 @@ int main(int argc, char** argv){
 
     //Input output and config options
     std::string cfg;
-    unsigned pNevts;
+    int pNevts;
     std::string outFilePath;
     std::string filePath;
     std::string digifilePath;
@@ -324,11 +324,11 @@ int main(int argc, char** argv){
     ** for missing channel study
     **********************************/
     // SILICON
-    std::set<std::tuple<unsigned, int, int, unsigned, unsigned>> deadlistsi;
+    std::set<std::tuple<int, int, int, int, int>> deadlistsi;
 
     // Define average energy in layers plus and minus 1
-    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>> adj_to_dead;
-    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>> adj_to_dead_inlay;
+    std::set<std::tuple<int, int, int, int, int, int>> adj_to_dead;
+    std::set<std::tuple<int, int, int, int, int, int>> adj_to_dead_inlay;
 
     // Kill cells and calculate statistics on adjacent dead cells
     unsigned N_try_success = 0; // Number of killed cells
@@ -339,15 +339,15 @@ int main(int argc, char** argv){
     */
 
     TRandom3 r(0);
-    for(unsigned lr = 1; lr <= 28; ++lr) {
+    for(int lr = 1; lr <= 28; ++lr) {
         for(int waferU = -12; waferU <= 12; ++waferU) {
             for(int waferV = -12; waferV <= 12; ++waferV) {
-                for(unsigned cellU = 0; cellU <= 16; ++cellU) {
-                    for(unsigned cellV = 0; cellV <=16; ++cellV){
+                for(int cellU = 0; cellU <= 16; ++cellU) {
+                    for(int cellV = 0; cellV <=16; ++cellV){
                         N_try_all++;
                         if(r.Rndm() < deadfrac){
                             N_try_success++;
-                            std::tuple<unsigned,int,int,unsigned,unsigned> deadCell(
+                            std::tuple<int,int,int,int,int> deadCell(
                                 lr,
                                 waferU,
                                 waferV,
@@ -373,9 +373,9 @@ int main(int argc, char** argv){
                                 std::get<4>(deadCell)
                             });
 
-                            std::vector<std::tuple<unsigned,int,int,unsigned,unsigned>> inLayerNeighbors;
+                            std::vector<std::tuple<int,int,int,int,int>> inLayerNeighbors;
                             inLayerNeighbors = getNeighbors(deadCell);
-                            unsigned iN = 0;
+                            int iN = 0;
                             for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); +=itr){
                                 adj_to_dead_inlay.insert(
                                     iN,
@@ -481,12 +481,12 @@ int main(int argc, char** argv){
     std::vector<float   > *rechitPosx   = 0;
     std::vector<float   > *rechitPosy   = 0;
     std::vector<float   > *rechitPosz   = 0;
-    std::vector<unsigned> *rechitLayer  = 0;
-    std::vector<unsigned> *rechitIndex  = 0;
+    std::vector<int> *rechitLayer  = 0;
+    std::vector<int> *rechitIndex  = 0;
     std::vector<int     > *rechitWaferU = 0;
     std::vector<int     > *rechitWaferV = 0;
-    std::vector<unsigned> *rechitCellU  = 0;
-    std::vector<unsigned> *rechitCellV  = 0;
+    std::vector<int> *rechitCellU  = 0;
+    std::vector<int> *rechitCellV  = 0;
     std::vector<float   > *genEta       = 0;
     std::vector<float   > *genPhi       = 0;
 
@@ -557,7 +557,7 @@ int main(int argc, char** argv){
 
         // Loop over hits of event
         for (unsigned iH(0); iH<(*rechitEnergy).size(); ++iH){
-            unsigned layer   = (*rechitLayer)[iH];
+            int layer   = (*rechitLayer)[iH];
             //double   xh      = (*rechitPosx)[iH];
             //double   yh      = (*rechitPosy)[iH];
             double   zh      = (*rechitPosz)[iH];
@@ -572,9 +572,9 @@ int main(int argc, char** argv){
 
             int waferU  = (*rechitWaferU)[iH];
             int waferV  = (*rechitWaferV)[iH];
-            unsigned cellU   = (*rechitCellU)[iH];
-            unsigned cellV   = (*rechitCellV)[iH];
-            unsigned index   = (*rechitIndex)[iH];
+            int cellU   = (*rechitCellU)[iH];
+            int cellV   = (*rechitCellV)[iH];
+            int index   = (*rechitIndex)[iH];
 
             /* Select hits that are:
             **     - in CE-E
@@ -583,8 +583,8 @@ int main(int argc, char** argv){
             */
             if(!index && zh > 0 && dR < coneSize) {
                 rechitsum += lenergy;
-                std::tuple<unsigned, int, int, unsigned, unsigned> tempsi(layer,waferU,waferV,cellU,cellV);
-                std::set<std::tuple<unsigned, int, int, unsigned, unsigned>>::iterator ibc=deadlistsi.find(tempsi);
+                std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
+                std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistsi.find(tempsi);
 
                 // Calculate energy without dead Si cells
                 if(ibc == deadlistsi.end()) {
@@ -611,14 +611,14 @@ int main(int argc, char** argv){
                 /* Perform Simple Average
                 ** First, check if the cell is in a neighbors list
                 */
-                std::tuple<unsigned, unsigned, int, int, unsigned, unsigned> tempsiU(
+                std::tuple<int, int, int, int, int, int> tempsiU(
                     0,layer,waferU,waferV,cellU,cellV
                 );
-                std::tuple<unsigned, unsigned, int, int, unsigned, unsigned> tempsiD(
+                std::tuple<int, int, int, int, int, int> tempsiD(
                     1,layer,waferU,waferV,cellU,cellV
                 );
-                std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrU=adj_to_dead.find(tempsiU);
-                std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrD=adj_to_dead.find(tempsiD);
+                std::set<std::tuple<int, int, int, int, int, int>>::iterator itrU=adj_to_dead.find(tempsiU);
+                std::set<std::tuple<int, int, int, int, int, int>>::iterator itrD=adj_to_dead.find(tempsiD);
 
                 if(itrU!=adj_to_dead.end()) {
                     rechitsumlaypn += lenergy/2;
@@ -644,18 +644,18 @@ int main(int argc, char** argv){
                 }
 
                 // Get rechits of dead cells' neighbors
-                for(unsigned n = 0; n < 6; ++n){
+                for(int n = 0; n < 6; ++n){
                     // Same layer neighbors
-                    std::tuple<unsigned, unsigned, int, int, unsigned, unsigned> tempsiNn(
+                    std::tuple<int, int, int, int, int, int> tempsiNn(
                         n,layer,waferU,waferV,cellU,cellV
                     );
-                    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
+                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
                     if(itrNn!=adj_to_dead_inlay.end()) {
-                        std::vector<std::tuple<unsigned,int,int,unsigned,unsigned>> sameLayerNeighbors;
+                        std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
                         sameLayerNeighbors = getNeighbors(tempsi);
                         // Get neighbor number
-                        unsigned nn = (std::get<0>(*itrNn)+3)%6;
-                        std::tuple<int, int, unsigned, unsigned> deadCell;
+                        int nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, int, int> deadCell;
                         std::get<0>deadCell = std::get<1>(sameLayerNeighbors[nn]);
                         std::get<1>deadCell = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>deadCell = std::get<3>(sameLayerNeighbors[nn]);
@@ -670,16 +670,16 @@ int main(int argc, char** argv){
                         }
                     }
                     // Next layer neighbors
-                    std::tuple<unsigned, unsigned, int, int, unsigned, unsigned> tempsiUNn(
+                    std::tuple<int, int, int, int, int, int> tempsiUNn(
                         n,layer,waferU,waferV,cellU,cellV
                     );
-                    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
+                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
                     if(itrUNn!=adj_to_dead_inlay.end()) {
-                        std::vector<std::tuple<unsigned,int,int,unsigned,unsigned>> sameLayerNeighbors;
+                        std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
                         sameLayerNeighbors = getNeighbors(tempsi);
                         // Get neighbor number
-                        unsigned nn = (std::get<0>(*itrNn)+3)%6;
-                        std::tuple<int, int, unsigned, unsigned> deadCell;
+                        int nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, int, int> deadCell;
                         std::get<0>deadCell = std::get<1>(nextLayerNeighbors[nn]);
                         std::get<1>deadCell = std::get<2>(nextLayerNeighbors[nn]);
                         std::get<2>deadCell = std::get<3>(nextLayerNeighbors[nn]);
@@ -694,16 +694,16 @@ int main(int argc, char** argv){
                         }
                     }
                     // Previous layer neighbors
-                    std::tuple<unsigned, unsigned, int, int, unsigned, unsigned> tempsiDNn(
+                    std::tuple<int, int, int, int, int, int> tempsiDNn(
                         n,layer,waferU,waferV,cellU,cellV
                     );
-                    std::set<std::tuple<unsigned, unsigned, int, int, unsigned, unsigned>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
+                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
                     if(itrDNn!=adj_to_dead_inlay.end()) {
-                        std::vector<std::tuple<unsigned,int,int,unsigned,unsigned>> sameLayerNeighbors;
+                        std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
                         prevLayerNeighbors = getNeighbors(tempsi);
                         // Get neighbor number
-                        unsigned nn = (std::get<0>(*itrNn)+3)%6;
-                        std::tuple<int, int, unsigned, unsigned> deadCell;
+                        int nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, int, int> deadCell;
                         std::get<0>deadCell = std::get<1>(prevLayerNeighbors[nn]);
                         std::get<1>deadCell = std::get<2>(prevLayerNeighbors[nn]);
                         std::get<2>deadCell = std::get<3>(prevLayerNeighbors[nn]);
