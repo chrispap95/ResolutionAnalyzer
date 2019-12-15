@@ -481,12 +481,12 @@ int main(int argc, char** argv){
     std::vector<float   > *rechitPosx   = 0;
     std::vector<float   > *rechitPosy   = 0;
     std::vector<float   > *rechitPosz   = 0;
-    std::vector<int> *rechitLayer  = 0;
-    std::vector<int> *rechitIndex  = 0;
+    std::vector<int     > *rechitLayer  = 0;
+    std::vector<int     > *rechitIndex  = 0;
     std::vector<int     > *rechitWaferU = 0;
     std::vector<int     > *rechitWaferV = 0;
-    std::vector<int> *rechitCellU  = 0;
-    std::vector<int> *rechitCellV  = 0;
+    std::vector<int     > *rechitCellU  = 0;
+    std::vector<int     > *rechitCellV  = 0;
     std::vector<float   > *genEta       = 0;
     std::vector<float   > *genPhi       = 0;
 
@@ -731,7 +731,7 @@ int main(int argc, char** argv){
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
-            if ((*itr)[2] > 0) {
+            if ((*itr)[5] > 0) {
                 /* This condition is necessary to ensure the cell was within
                 ** the 53 mm cone.
                 */
