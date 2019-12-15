@@ -595,7 +595,8 @@ int main(int argc, char** argv){
                     /* ML code
                     ** Input dead cells eta, phi and rechits
                     */
-                    std::cout << "Debug!!!" << std::endl;
+                    std::cout << "Debug!!! Event:" << ievt << "  Wafer:" << waferU
+                    << ", " << waferV << std::endl;
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
