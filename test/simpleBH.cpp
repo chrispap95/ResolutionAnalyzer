@@ -386,7 +386,6 @@ int main(int argc, char** argv){
                                     std::get<4>(*itr)
                                 });
                                 iN++;
-                                std::cout << "Debug: " << iN << std::endl;
                             }
 
                             std::array<float, 30> temp_vector;
@@ -651,6 +650,7 @@ int main(int argc, char** argv){
                         n,layer,waferU,waferV,cellU,cellV
                     );
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
+                    std::cout << "Debug: " << n << ", " << lenergy << std::endl;
                     if(itrNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
                         sameLayerNeighbors = getNeighbors(tempsi);
@@ -661,7 +661,6 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        //std::cout << "Debug: " << n << ", " << nn << ", " << lenergy << std::endl;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
