@@ -650,8 +650,8 @@ int main(int argc, char** argv){
                         n,layer,waferU,waferV,cellU,cellV
                     );
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
-                    std::cout << "Debug: " << n << ", " << lenergy << std::endl;
                     if(itrNn!=adj_to_dead_inlay.end()) {
+                        std::cout << "Debug: " << n << ", " << lenergy << std::endl;
                         std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
                         sameLayerNeighbors = getNeighbors(tempsi);
                         // Get neighbor number
