@@ -8,6 +8,7 @@ chpapage/SingleGamma_E${i}Eta1p7/SingleGamma_E${i}Eta1p7_CMSSW_10_6_3_patch1_upg
 cat >> simpleBH_E${i}Eta1p7.cfg << "EOF"
 recoFileName = ntuples
 nRuns = 80
-deadfrac = 0.1
+deadfrac = 0.01
 EOF
+
 done
