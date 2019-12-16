@@ -697,6 +697,7 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
+                        bool cntrl = 0;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer-1 &&
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
@@ -708,8 +709,10 @@ int main(int argc, char** argv){
                                 << waferU << ", " << waferV << ", " << cellU << ", " << cellV << "\n"
                                 << std::endl;
                                 (*itr)[n+16] = lenergy;
-                            }else std::cout<< "ERROR\n";
+                                cntrl = 1;
+                            }
                         }
+                        if (!cntrl) std::cout<< "ERROR\n";
                     }
                     // Previous layer neighbors
                     std::tuple<int, int, int, int, int, int> tempsiDNn(
