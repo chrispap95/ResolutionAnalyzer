@@ -708,7 +708,7 @@ int main(int argc, char** argv){
                                 << waferU << ", " << waferV << ", " << cellU << ", " << cellV << "\n"
                                 << std::endl;
                                 (*itr)[n+16] = lenergy;
-                            }else std::cout<< "ERROR\n"
+                            }else std::cout<< "ERROR\n";
                         }
                     }
                     // Previous layer neighbors
