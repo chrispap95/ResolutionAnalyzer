@@ -11,14 +11,14 @@ setenv SCRAM_ARCH slc7_amd64_gcc820
 cd CMSSW_10_6_3_patch1/src/
 scramv1 b ProjectRename
 eval `scramv1 runtime -csh` # cmsenv is an alias not on the workers
-#echo "Arguments passed to this script are: for 1: $1, and for 2: $2"
 cd ResolutionAnalyzer
 mkdir {lib,bin,obj}
 make
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:lib
-./bin/simpleBH -c scripts/simpleBH.cfg
-xrdcp out.root root://cmseos.fnal.gov//store/user/chpapage/out.root
+#echo "Arguments passed to this script are: for 1: $1, and for 2: $2"
+./bin/simpleBH -c scripts/$1
+xrdcp $2 root://cmseos.fnal.gov//store/user/chpapage/$2
 ### remove the output file if you don't want it automatically transferred when the job ends
-rm out.root
+rm $2
 cd ${_CONDOR_SCRATCH_DIR}
-rm -rf CMSSW_8_0_25
+rm -rf CMSSW_10_6_3_patch1
