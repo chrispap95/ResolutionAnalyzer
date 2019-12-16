@@ -70,10 +70,10 @@ std::vector<std::tuple<int, int, int, int, int>> getNeighbors(
     // cell (+1, 0) wrt given
     std::tuple<int, int, int, int, int> n5(deadCell);
     std::get<3>(n5) += 1;
+    std::get<4>(n6) += 1;
     // cell (+1,+1) wrt given
     std::tuple<int, int, int, int, int> n6(deadCell);
     std::get<3>(n6) += 1;
-    std::get<4>(n6) += 1;
 
     // Check boundary conditions and make transitions between wafers when on the edge
     // For n1
