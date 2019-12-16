@@ -704,8 +704,8 @@ int main(int argc, char** argv){
                             ){
                                 std::cout << "Debug: deadcell " << (*itr)[0] << ", "
                                 << (*itr)[1] << ", " << (*itr)[2] << ", " << (*itr)[3] << ", " << (*itr)[4] << "\n"
-                                << "UN " << n << ", " << (*itr)[0] << ", "
-                                << (*itr)[1] << ", " << (*itr)[2] << ", " << (*itr)[3] << ", " << (*itr)[4] << "\n"
+                                << "UN " << n << ", " << layer << ", "
+                                << waferU << ", " << waferV << ", " << cellU << ", " << cellV << "\n"
                                 << std::endl;
                                 (*itr)[n+16] = lenergy;
                             }
