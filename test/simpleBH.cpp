@@ -685,7 +685,7 @@ int main(int argc, char** argv){
                         }
                         if (!cntrl) {
                             std::cout<< "ERROR: ";
-                            std::cout << "deadcell " << la << ", "
+                            std::cout << "deadcell " << layer << ", "
                             << std::get<0>(deadCell) << ", " << std::get<1>(deadCell)
                             << ", " << std::get<2>(deadCell) << ", " << std::get<3>(deadCell)<< "\n"
                             << "NN " << n << ", " << layer << ", "
