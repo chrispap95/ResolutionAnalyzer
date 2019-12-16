@@ -373,6 +373,13 @@ int main(int argc, char** argv){
                                 std::get<4>(deadCell)
                             });
 
+                            if(N_try_success == 1) {
+                                std::cout << "Debug:\n" << "dead cell: "
+                                << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
+                                << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
+                                << std::get<4>(deadCell) << "\n";
+                            }
+
                             std::vector<std::tuple<int,int,int,int,int>> inLayerNeighbors;
                             inLayerNeighbors = getNeighbors(deadCell);
                             int iN = 0;
@@ -385,6 +392,11 @@ int main(int argc, char** argv){
                                     std::get<3>(*itr),
                                     std::get<4>(*itr)
                                 });
+                                if(N_try_success == 1) {
+                                    << "neighbor " << iN << ": " << std::get<0>(*itr) << ", "
+                                    << std::get<1>(*itr) << ", " << std::get<2>(*itr) << ", "
+                                    << std::get<3>(*itr) << ", " << std::get<4>(*itr) << "\n";
+                                }
                                 iN++;
                             }
 
@@ -396,6 +408,7 @@ int main(int argc, char** argv){
                             temp_vector[3] = (float)cellU;  //dead cell's cellU
                             temp_vector[4] = (float)cellV;  //dead cell's cellV
                             MLvectorev.push_back(temp_vector);
+
                         }
                     }
                 }
@@ -660,16 +673,16 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        std::cout << "Debug1: "
-                        << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
-                        << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
-                        << n << ", " << lenergy << std::endl;
+                        //std::cout << "Debug1: "
+                        //<< std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
+                        //<< std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
+                        //<< n << ", " << lenergy << std::endl;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                                 (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
-                                std::cout << "ok" << std::endl;
+                                //std::cout << "ok" << std::endl;
                                 (*itr)[n+7] = lenergy;
                             }
                         }
