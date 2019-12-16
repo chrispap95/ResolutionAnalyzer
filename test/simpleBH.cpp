@@ -651,11 +651,11 @@ int main(int argc, char** argv){
                     );
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
                     if(itrNn!=adj_to_dead_inlay.end()) {
-                        std::cout << "Debug: " << n << ", " << lenergy << std::endl;
                         std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
                         sameLayerNeighbors = getNeighbors(tempsi);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
+                        std::cout << "Debug: " << nn << ", " << lenergy << std::endl;
                         std::tuple<int, int, int, int> deadCell;
                         std::get<0>(deadCell) = std::get<1>(sameLayerNeighbors[nn]);
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
