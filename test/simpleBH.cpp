@@ -660,9 +660,10 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        std::cout << "Debug: " << std::get<0>(deadCell) << ", "
-                        << std::get<1>(deadCell) << ", " << std::get<2>(deadCell) << ", "
-                        << std::get<3>(deadCell) << ", " << lenergy << std::endl;
+                        std::cout << "Debug1: "
+                        << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
+                        << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
+                        << n << ", " << lenergy << std::endl;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
