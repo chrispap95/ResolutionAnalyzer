@@ -1,0 +1,10 @@
+universe = vanilla
+Executable = condor-exec.csh
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+Transfer_Input_Files = condor-exec.csh, CMSSW_10_6_3_patch1.tgz
+Output = simpleBH_$(Cluster)_$(Process).stdout
+Error = simpleBH_$(Cluster)_$(Process).stderr
+Log = simpleBH_$(Cluster)_$(Process).log
+x509userproxy = $ENV(X509_USER_PROXY)
+Queue 1

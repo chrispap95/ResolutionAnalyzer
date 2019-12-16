@@ -1,3 +1,14 @@
+# Log files
+*.stderr
+*.stdout
+*.log
+docker_stderror
+
+# Tar files
+*.tar
+*.tgz
+*.tar.gz
+
 # Prerequisites
 *.d
 
