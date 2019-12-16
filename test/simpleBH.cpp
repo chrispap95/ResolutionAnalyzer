@@ -373,12 +373,12 @@ int main(int argc, char** argv){
                                 std::get<4>(deadCell)
                             });
 
-                            if(N_try_success == 1) {
+                            /*if(N_try_success == 1) {
                                 std::cout << "Debug:\n" << "dead cell: "
                                 << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
                                 << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
                                 << std::get<4>(deadCell) << "\n";
-                            }
+                            }*/
 
                             std::vector<std::tuple<int,int,int,int,int>> inLayerNeighbors;
                             inLayerNeighbors = getNeighbors(deadCell);
@@ -392,11 +392,11 @@ int main(int argc, char** argv){
                                     std::get<3>(*itr),
                                     std::get<4>(*itr)
                                 });
-                                if(N_try_success == 1) {
+                                /*if(N_try_success == 1) {
                                     std::cout << "neighbor " << iN << ": " << std::get<0>(*itr) << ", "
                                     << std::get<1>(*itr) << ", " << std::get<2>(*itr) << ", "
                                     << std::get<3>(*itr) << ", " << std::get<4>(*itr) << "\n";
-                                }
+                                }*/
                                 iN++;
                             }
 
@@ -673,23 +673,18 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        //std::cout << "Debug1: "
-                        //<< std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
-                        //<< std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
-                        //<< n << ", " << lenergy << std::endl;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                                 (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
-                                //std::cout << "ok" << std::endl;
                                 (*itr)[n+7] = lenergy;
                             }
                         }
                     }
                     // Next layer neighbors
                     std::tuple<int, int, int, int, int, int> tempsiUNn(
-                        n,layer,waferU,waferV,cellU,cellV
+                        n,layer-1,waferU,waferV,cellU,cellV
                     );
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
                     if(itrUNn!=adj_to_dead_inlay.end()) {
@@ -713,7 +708,7 @@ int main(int argc, char** argv){
                     }
                     // Previous layer neighbors
                     std::tuple<int, int, int, int, int, int> tempsiDNn(
-                        n,layer,waferU,waferV,cellU,cellV
+                        n,layer+1,waferU,waferV,cellU,cellV
                     );
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
                     if(itrDNn!=adj_to_dead_inlay.end()) {
