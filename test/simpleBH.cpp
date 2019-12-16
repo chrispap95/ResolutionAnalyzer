@@ -660,12 +660,14 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
+                        std::cout << "Debug: " << std::get<0>(deadCell) << ", "
+                        << std::get<1>(deadCell) << ", " << std::get<2>(deadCell) << ", "
+                        << std::get<3>(deadCell) << ", " << lenergy << std::endl;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                                 (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
-                                std::cout << "Debug: " << n << ", " << nn << ", " << lenergy << std::endl;
                                 (*itr)[n+7] = lenergy;
                             }
                         }
