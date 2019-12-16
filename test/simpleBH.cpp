@@ -251,9 +251,9 @@ int main(int argc, char** argv){
     }
     outputFile->cd();
 
-    TH1F* h_rechitsum = new TH1F("h_rechitsum","Rechitsum silicon;E[GeV]",100,0,20.);
-    TH1F* h_rechitsumdead_Si = new TH1F("h_rechitsumdead_Si","Rechitsum dead silicon;E[GeV]",100,0,20.);
-    TH1F* h_rechitsumave = new TH1F("h_rechitsumave","Sum energy average method;E[GeV]",100,0,20.);
+    TH1F* h_rechitsum = new TH1F("h_rechitsum","Rechitsum silicon;E[GeV]",100,50,150.);
+    TH1F* h_rechitsumdead_Si = new TH1F("h_rechitsumdead_Si","Rechitsum dead silicon;E[GeV]",100,50,150.);
+    TH1F* h_rechitsumave = new TH1F("h_rechitsumave","Sum energy average method;E[GeV]",100,50,150.);
 
     /**********************************
     ** ML Study output section
@@ -686,7 +686,6 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
-                        bool cntrl = 0;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer-1 &&
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
