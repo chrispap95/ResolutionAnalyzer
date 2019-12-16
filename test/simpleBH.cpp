@@ -702,7 +702,7 @@ int main(int argc, char** argv){
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
-                                std::cout<< "Debug: ok! " << n << std::endl;
+                                std::cout<< "Debug: ok! " << n << ", " << lenergy << std::endl;
                                 (*itr)[n+16] = lenergy;
                             }
                         }
