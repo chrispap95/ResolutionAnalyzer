@@ -683,7 +683,15 @@ int main(int argc, char** argv){
                                 cntrl = 1;
                             }
                         }
-                        if (!cntrl) std::cout<< "ERROR\n";
+                        if (!cntrl) {
+                            std::cout<< "ERROR: ";
+                            std::cout << "deadcell " << la << ", "
+                            << std::get<0>(deadCell) << ", " << std::get<1>(deadCell)
+                            << ", " << std::get<2>(deadCell) << ", " << std::get<3>(deadCell)<< "\n"
+                            << "NN " << n << ", " << layer << ", "
+                            << waferU << ", " << waferV << ", " << cellU << ", " << cellV << "\n"
+                            << std::endl;
+                        }
                     }
                     // Next layer neighbors
                     std::tuple<int, int, int, int, int, int> tempsiUNn(
@@ -706,11 +714,6 @@ int main(int argc, char** argv){
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
-                                std::cout << "Debug: deadcell " << (*itr)[0] << ", "
-                                << (*itr)[1] << ", " << (*itr)[2] << ", " << (*itr)[3] << ", " << (*itr)[4] << "\n"
-                                << "UN " << n << ", " << layer << ", "
-                                << waferU << ", " << waferV << ", " << cellU << ", " << cellV << "\n"
-                                << std::endl;
                                 (*itr)[n+16] = lenergy;
                                 cntrl = 1;
                             }
