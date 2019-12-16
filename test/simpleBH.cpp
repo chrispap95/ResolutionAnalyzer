@@ -393,7 +393,7 @@ int main(int argc, char** argv){
                                     std::get<4>(*itr)
                                 });
                                 if(N_try_success == 1) {
-                                    << "neighbor " << iN << ": " << std::get<0>(*itr) << ", "
+                                    std::cout << "neighbor " << iN << ": " << std::get<0>(*itr) << ", "
                                     << std::get<1>(*itr) << ", " << std::get<2>(*itr) << ", "
                                     << std::get<3>(*itr) << ", " << std::get<4>(*itr) << "\n";
                                 }
