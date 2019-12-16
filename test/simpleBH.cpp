@@ -1,6 +1,13 @@
 /****************************************************
 **  Channelog:
 **      Moved to CMSSW output.
+**      Editor: Christos Papageorgakis
+**
+**      This code uses ntuples to produce rechitsums
+**      for a given dead Si cell fraction.
+**      The output also contains an ntuple of all the
+**      dead cells that can be used to train a DNN to
+**      estimate the lost energy.
 ****************************************************/
 
 #include<string>
@@ -49,6 +56,9 @@ double DeltaR(double eta1,double phi1,double eta2,double phi2){
     return dr;
 }
 
+/* Function that gives a vector of tuples that describe the neighbors
+** of the tuple that is given as the input.
+*/
 std::vector<std::tuple<int, int, int, int, int>> getNeighbors(
     std::tuple<int, int, int, int, int> deadCell)
 {
@@ -186,7 +196,7 @@ int main(int argc, char** argv){
     ("adjacent",        po::value<bool>(&adjacent)->default_value(0))
     //Generate ML study training sample
     ("MLsample",        po::value<bool>(&MLsample)->default_value(1))
-    //File to export data for ML
+    //File to export data for ML **********Attention: Obsolete!
     ("MLFilePath",      po::value<std::string>(&MLFilePath)->default_value("training_sample.root"))
 
     ;
@@ -338,6 +348,9 @@ int main(int argc, char** argv){
     float N_clusters = 0; // Number of dead cells clusters (n_dead > 2)
     */
 
+    /* Loops over all possible cells and kills them with a probability
+    ** given by the dead fraction.
+    */
     TRandom3 r(0);
     for(int lr = 1; lr <= 28; ++lr) {
         for(int waferU = -12; waferU <= 12; ++waferU) {
@@ -396,7 +409,6 @@ int main(int argc, char** argv){
                             temp_vector[3] = (float)cellU;  //dead cell's cellU
                             temp_vector[4] = (float)cellV;  //dead cell's cellV
                             MLvectorev.push_back(temp_vector);
-
                         }
                     }
                 }
