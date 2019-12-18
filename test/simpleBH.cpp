@@ -662,6 +662,7 @@ int main(int argc, char** argv){
                     std::tuple<int, int, int, int, int, int> tempsiNn(
                         n,layer,waferU,waferV,cellU,cellV
                     );
+                    //Check if cell is an nth neighbor of some dead cell
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
                     if(itrNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
@@ -698,13 +699,19 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
+                        bool check = 0;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer-1 &&
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+16] = lenergy;
+                                check = 1;
                             }
+                        }
+                        if (!check) {
+                            std::cout << "Error! Could not find the dead cell corresponding to: "
+                            << nn << waferU << ", " << waferV << ", " << cellU << ", " << cellV << std::endl;
                         }
                     }
 
