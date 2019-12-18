@@ -710,8 +710,11 @@ int main(int argc, char** argv){
                             }
                         }
                         if (!check) {
-                            std::cout << "Error! Could not find the dead cell corresponding to: "
-                            << nn << waferU << ", " << waferV << ", " << cellU << ", " << cellV << std::endl;
+                            std::cout << "Error! Could not find the dead cell "
+                            << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
+                            << std::get<2>(deadCell) << ", " << std::get<3>(deadCell)
+                            << "\ncorresponding to: " << nn << ", "<< waferU << ", "
+                            << waferV << ", " << cellU << ", " << cellV << std::endl;
                         }
                     }
 
