@@ -434,6 +434,7 @@ int main(int argc, char** argv){
         if (debug) std::cout << " - Event contains " << (*rechitEnergy).size()
         << " rechits." << std::endl;
         double coneSize = 0.3;
+        MLrechitsum = 0;
 
         // Loop over hits of event
         for (unsigned iH(0); iH<(*rechitEnergy).size(); ++iH){
@@ -497,7 +498,6 @@ int main(int argc, char** argv){
                 MLphi    = (*itr)[6];
                 MLdead   = (*itr)[7];
                 MLevent  = (*itr)[8];
-                MLrechitsum = MLrechitsum;
                 t1->Fill();
             }
         }
