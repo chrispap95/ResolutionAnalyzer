@@ -261,6 +261,10 @@ int main(int argc, char** argv){
     }
     outputFile->cd();
 
+    TH1F* h_rechitsum = new TH1F("h_rechitsum","Rechitsum silicon;E[GeV]",100,50,150.);
+    TH1F* h_rechitsumdead_Si = new TH1F("h_rechitsumdead_Si","Rechitsum dead silicon;E[GeV]",100,50,150.);
+    TH1F* h_rechitsumave = new TH1F("h_rechitsumave","Sum energy average method;E[GeV]",100,50,150.);
+
     /**********************************
     ** ML Study output section
     **     - MLlayer is dead cell layer
@@ -272,8 +276,11 @@ int main(int argc, char** argv){
     **     - MLdead is dead cell rechit
     ** We also need to create a ?set? container to store the values before writing to TTree
     **********************************/
-    float MLlayer, MLeta, MLphi, MLdead, MLevent;
+    float MLlayer, MLeta, MLphi, MLdead, MLnup, MLndown, MLevent;
     float MLwaferU, MLwaferV, MLcellU, MLcellV;
+    float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6;
+    float MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6;
+    float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6;
     float MLrechitsum;
     TTree* t1 = new TTree("t1","sample");
     t1->Branch("MLlayer"    ,&MLlayer    ,"MLlayer/F"    );
@@ -283,7 +290,27 @@ int main(int argc, char** argv){
     t1->Branch("MLcellV"    ,&MLcellV    ,"MLcellV/F"    );
     t1->Branch("MLeta"      ,&MLeta      ,"MLeta/F"      );
     t1->Branch("MLphi"      ,&MLphi      ,"MLphi/F"      );
+    t1->Branch("MLn1"       ,&MLn1       ,"MLn1/F"       );
+    t1->Branch("MLn2"       ,&MLn2       ,"MLn2/F"       );
+    t1->Branch("MLn3"       ,&MLn3       ,"MLn3/F"       );
+    t1->Branch("MLn4"       ,&MLn4       ,"MLn4/F"       );
+    t1->Branch("MLn5"       ,&MLn5       ,"MLn5/F"       );
+    t1->Branch("MLn6"       ,&MLn6       ,"MLn6/F"       );
     t1->Branch("MLdead"     ,&MLdead     ,"MLdead/F"     );
+    t1->Branch("MLnup"      ,&MLnup      ,"MLnup/F"      );
+    t1->Branch("MLndown"    ,&MLndown    ,"MLndown/F"    );
+    t1->Branch("MLun1"      ,&MLun1      ,"MLun1/F"      );
+    t1->Branch("MLun2"      ,&MLun2      ,"MLun2/F"      );
+    t1->Branch("MLun3"      ,&MLun3      ,"MLun3/F"      );
+    t1->Branch("MLun4"      ,&MLun4      ,"MLun4/F"      );
+    t1->Branch("MLun5"      ,&MLun5      ,"MLun5/F"      );
+    t1->Branch("MLun6"      ,&MLun6      ,"MLun6/F"      );
+    t1->Branch("MLdn1"      ,&MLdn1      ,"MLdn1/F"      );
+    t1->Branch("MLdn2"      ,&MLdn2      ,"MLdn2/F"      );
+    t1->Branch("MLdn3"      ,&MLdn3      ,"MLdn3/F"      );
+    t1->Branch("MLdn4"      ,&MLdn4      ,"MLdn4/F"      );
+    t1->Branch("MLdn5"      ,&MLdn5      ,"MLdn5/F"      );
+    t1->Branch("MLdn6"      ,&MLdn6      ,"MLdn6/F"      );
     t1->Branch("MLevent"    ,&MLevent    ,"MLevent/F"    );
     t1->Branch("MLrechitsum",&MLrechitsum,"MLrechitsum/F");
 
@@ -292,12 +319,16 @@ int main(int argc, char** argv){
     ** {dead cell:
     **      layer, waferU, waferV, cellU, cellV,
     **      eta, phi,
+    **      MLn1, MLn2, MLn3, MLn4, MLn5, MLn6,
     **      rechit,
+    **      MLup, MLdown,
+    **      MLun1, MLun2, MLun3, MLun4, MLun5, MLun6,
+    **      MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6,
     **      MLevent,
     **      MLrechitsum
     ** }
     */
-    std::vector<std::array<float, 10>> MLvectorev;
+    std::vector<std::array<float, 30>> MLvectorev;
 
     /**********************************
     ** for missing channel study
@@ -305,9 +336,17 @@ int main(int argc, char** argv){
     // SILICON
     std::set<std::tuple<int, int, int, int, int>> deadlistsi;
 
+    // Define average energy in layers plus and minus 1
+    std::set<std::tuple<int, int, int, int, int, int>> adj_to_dead;
+    std::set<std::tuple<int, int, int, int, int, int>> adj_to_dead_inlay;
+
     // Kill cells and calculate statistics on adjacent dead cells
     unsigned N_try_success = 0; // Number of killed cells
     unsigned N_try_all = 0; // Number of trials to kill cells
+    /*
+    float N_cluster2 = 0; // Number of dead cells clusters (n_dead = 2)
+    float N_clusters = 0; // Number of dead cells clusters (n_dead > 2)
+    */
 
     /* Loops over all possible cells and kills them with a probability
     ** given by the dead fraction.
@@ -330,8 +369,40 @@ int main(int argc, char** argv){
                             );
                             deadlistsi.insert(deadCell);
 
-                            std::array<float, 10> temp_vector;
-                            for(unsigned k(0); k < 10; ++k) temp_vector[k] = 0;
+                            adj_to_dead.insert({
+                                0, //corresponds to cell bellow
+                                std::get<0>(deadCell)-1,
+                                std::get<1>(deadCell),
+                                std::get<2>(deadCell),
+                                std::get<3>(deadCell),
+                                std::get<4>(deadCell)
+                            });
+                            adj_to_dead.insert({
+                                1, //corresponds to cell above
+                                std::get<0>(deadCell)+1,
+                                std::get<1>(deadCell),
+                                std::get<2>(deadCell),
+                                std::get<3>(deadCell),
+                                std::get<4>(deadCell)
+                            });
+
+                            std::vector<std::tuple<int,int,int,int,int>> inLayerNeighbors;
+                            inLayerNeighbors = getNeighbors(deadCell);
+                            int iN = 0;
+                            for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); ++itr){
+                                adj_to_dead_inlay.insert({
+                                    iN,
+                                    std::get<0>(*itr),
+                                    std::get<1>(*itr),
+                                    std::get<2>(*itr),
+                                    std::get<3>(*itr),
+                                    std::get<4>(*itr)
+                                });
+                                iN++;
+                            }
+
+                            std::array<float, 30> temp_vector;
+                            for(unsigned k(0); k < 30; ++k) temp_vector[k] = 0;
                             temp_vector[0] = (float)lr; //layer
                             temp_vector[1] = (float)waferU; //dead cell's waferU
                             temp_vector[2] = (float)waferV; //dead cell's waferV
@@ -348,6 +419,63 @@ int main(int argc, char** argv){
     std::cout << "List of dead Si cells was created successfully. \n"
     << "Killed " << N_try_success << " cells using " << N_try_all << " trials.\n"
     << std::endl;
+
+    /* Old code
+    for(unsigned i(0);i<nsidead;i++) {
+        N_try_success++;
+        ld_si=lRndm.Integer(nsilayer);
+        range_si=simaxid[ld_si]-siminid[ld_si];
+        cd_si=siminid[ld_si]+(lRndm.Integer(range_si));
+        // Enforce that any dead cell has no more than one adjacent dead cell
+        unsigned adj_ok = 0;
+        //Need to switch this off for the moment
+        if (deadlistsi.find(std::make_pair(ld_si, cd_si)) != deadlistsi.end()) {
+            --i;
+            continue;
+        } //Insert end of comment here
+        if (adjacent) {
+            if (deadlistsi.find(std::make_pair(ld_si, cd_si-497)) != deadlistsi.end()) adj_ok++;
+            if (deadlistsi.find(std::make_pair(ld_si, cd_si-496)) != deadlistsi.end()) adj_ok++;
+            if (deadlistsi.find(std::make_pair(ld_si, cd_si-1)) != deadlistsi.end()) adj_ok++;
+            if (deadlistsi.find(std::make_pair(ld_si, cd_si+1)) != deadlistsi.end()) adj_ok++;
+            if (deadlistsi.find(std::make_pair(ld_si, cd_si+496)) != deadlistsi.end()) adj_ok++;
+            if (deadlistsi.find(std::make_pair(ld_si, cd_si+497)) != deadlistsi.end()) adj_ok++;
+            if (adj_ok > 1) {
+                --i;
+                N_cluster2++;
+                //std::cout << "N_try_success = " << N_try_success
+                << ": Found two or more adjascent dead cells for " << cd_si
+                << " at layer " << ld_si << ". Aborting cell killing..."
+                << std::endl;//Insert end of comment here
+                continue;
+            }
+            if (adj_ok < 2) {
+                deadlistsi.insert(std::make_pair(ld_si,cd_si));
+            }
+            if (adj_ok == 1) N_clusters++;
+        }
+        else {
+            deadlistsi.insert(std::make_pair(ld_si,cd_si));
+        }
+    }
+
+    // Print statistics on adjacent dead cells
+    if (adjacent) {
+        std::cout << std::string(120,'-') << std::endl
+        << std::string(49,'-') << " Dead cells statistics "
+        << std::string(48,'-') << std::endl
+        << std::string(120,'-') << std::endl
+        << "Number of dead cells clusters: " << N_clusters << std::endl
+        << "Fraction of dead cluster cells: "
+        << N_clusters*2./13983553. << std::endl
+        << "Fraction of dead cells having a dead neighbor: "
+        << N_clusters*2./nsidead << std::endl
+        << "Dead fraction: " << deadfrac << std::endl
+        << "Times the code tried to create clusters with more than 2 dead cells: "
+        << N_cluster2 << std::endl
+        << std::string(120,'-') << std::endl;
+    }
+    */
 
     /**********************************
     **  start event loop
@@ -396,7 +524,7 @@ int main(int argc, char** argv){
     // Loop over entries (events)
     for (unsigned ievt(0); ievt<nEvts; ++ievt){
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
-            for(unsigned k(5); k < 10; ++k) (*itr)[k] = 0;
+            for(unsigned k(5); k < 30; ++k) (*itr)[k] = 0;
         }
         if (ievtRec>=lRecTree->GetEntries()) continue;
         Long64_t local_entry = lRecTree->LoadTree(ievt);
@@ -426,23 +554,34 @@ int main(int argc, char** argv){
 
         double etagen   = 99999.;
         double phigen   = 99999.;
+        //double thetagen = -1.;
         if((*genEta).size()>0) {
             etagen   = (*genEta)[0];
             phigen   = (*genPhi)[0];
+            //thetagen = 2*TMath::ATan(exp(-etagen));
         }
 
         if (debug) std::cout << " - Event contains " << (*rechitEnergy).size()
         << " rechits." << std::endl;
         double coneSize = 0.3;
+        double rechitsum = 0;
+        double rechitsumdead_Si = 0;
+        double rechitsumlaypn = 0;
 
         // Loop over hits of event
         for (unsigned iH(0); iH<(*rechitEnergy).size(); ++iH){
             int layer   = (*rechitLayer)[iH];
+            //double   xh      = (*rechitPosx)[iH];
+            //double   yh      = (*rechitPosy)[iH];
             double   zh      = (*rechitPosz)[iH];
             double   lenergy = (*rechitEnergy)[iH];
             double   leta    = (*rechitEta)[iH];
             double   lphi    = (*rechitPhi)[iH];
             double   dR      = DeltaR(etagen,phigen,leta,lphi);
+            //double   rgen    = zh*tan(thetagen);
+            //double   xgen    = rgen*cos(phigen);
+            //double   ygen    = rgen*sin(phigen);
+            //double   dR1     = fabs(sqrt((xgen-xh)*(xgen-xh)+(ygen-yh)*(ygen-yh)));
 
             int waferU  = (*rechitWaferU)[iH];
             int waferV  = (*rechitWaferV)[iH];
@@ -456,11 +595,13 @@ int main(int argc, char** argv){
             **     - in positive endcap
             */
             if(!index && zh > 0 && dR < coneSize) {
+                rechitsum += lenergy;
                 std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
                 std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistsi.find(tempsi);
 
                 // Calculate energy without dead Si cells
                 if(ibc == deadlistsi.end()) {
+                    rechitsumdead_Si += lenergy;
                     MLrechitsum += lenergy;
                 }else {
                     // Do stuff with dead cells
@@ -474,13 +615,141 @@ int main(int argc, char** argv){
                         ){
                             (*itr)[5] = leta;
                             (*itr)[6] = lphi;
-                            (*itr)[7] = lenergy;
-                            (*itr)[8] = (float)ievt;
+                            (*itr)[13] = lenergy;
+                            (*itr)[29] = (float)ievt;
+                        }
+                    }
+                }
+
+                /* Perform Simple Average
+                ** First, check if the cell is in a neighbors list
+                */
+                std::tuple<int, int, int, int, int, int> tempsiU(
+                    1,layer,waferU,waferV,cellU,cellV
+                );
+                std::tuple<int, int, int, int, int, int> tempsiD(
+                    0,layer,waferU,waferV,cellU,cellV
+                );
+                std::set<std::tuple<int, int, int, int, int, int>>::iterator itrU=adj_to_dead.find(tempsiU);
+                std::set<std::tuple<int, int, int, int, int, int>>::iterator itrD=adj_to_dead.find(tempsiD);
+
+                if(itrU!=adj_to_dead.end()) {
+                    rechitsumlaypn += lenergy/2;
+                    for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                        if( (*itr)[0] == layer-1 &&
+                            (*itr)[1] == waferU && (*itr)[2] == waferV &&
+                            (*itr)[3] == cellU  && (*itr)[4] == cellV
+                        ){
+                            (*itr)[14] = lenergy;
+                        }
+                    }
+                }
+                if(itrD!=adj_to_dead.end()) {
+                    rechitsumlaypn += lenergy/2;
+                    for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                        if( (*itr)[0] == layer+1 &&
+                            (*itr)[1] == waferU && (*itr)[2] == waferV &&
+                            (*itr)[3] == cellU  && (*itr)[4] == cellV
+                        ){
+                            (*itr)[15] = lenergy;
+                        }
+                    }
+                }
+
+                // Get rechits of dead cells' neighbors
+                for(int n = 0; n < 6; ++n){
+                    // Same layer neighbors
+                    std::tuple<int, int, int, int, int, int> tempsiNn(
+                        n,layer,waferU,waferV,cellU,cellV
+                    );
+                    //Check if cell is an nth neighbor of some dead cell
+                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
+                    if(itrNn!=adj_to_dead_inlay.end()) {
+                        std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
+                        sameLayerNeighbors = getNeighbors(tempsi);
+                        // Get neighbor number
+                        int nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, int, int> deadCell;
+                        std::get<0>(deadCell) = std::get<1>(sameLayerNeighbors[nn]);
+                        std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
+                        std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
+                        std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
+                        bool check = 0;
+                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                            if( (*itr)[0] == layer &&
+                                (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
+                                (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
+                            ){
+                                (*itr)[n+7] = lenergy;
+                                check = 1;
+                            }
+                        }
+                        if (!check) {
+                            std::cout << "Error! Could not find the dead cell "
+                            << std::get<0>(deadCell)    << ", " << std::get<1>(deadCell) << ", "
+                            << std::get<2>(deadCell)    << ", " << std::get<3>(deadCell)
+                            << "  \tcorresponding to: " << nn   << ", "  << waferU << ", "
+                            << waferV << ", " << cellU  << ", " << cellV << std::endl;
+                        }
+                    }
+
+                    // Next layer neighbors
+                    std::tuple<int, int, int, int, int, int> tempsiUNn(
+                        n,layer-1,waferU,waferV,cellU,cellV
+                    );
+                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
+                    if(itrUNn!=adj_to_dead_inlay.end()) {
+                        std::vector<std::tuple<int,int,int,int,int>> nextLayerNeighbors;
+                        nextLayerNeighbors = getNeighbors(tempsi);
+                        // Get neighbor number
+                        int nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, int, int> deadCell;
+                        std::get<0>(deadCell) = std::get<1>(nextLayerNeighbors[nn]);
+                        std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
+                        std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
+                        std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
+                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                            if( (*itr)[0] == layer-1 &&
+                            (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
+                            (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
+                            ){
+                                (*itr)[n+16] = lenergy;
+                            }
+                        }
+                    }
+
+                    // Previous layer neighbors
+                    std::tuple<int, int, int, int, int, int> tempsiDNn(
+                        n,layer+1,waferU,waferV,cellU,cellV
+                    );
+                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
+                    if(itrDNn!=adj_to_dead_inlay.end()) {
+                        std::vector<std::tuple<int,int,int,int,int>> prevLayerNeighbors;
+                        prevLayerNeighbors = getNeighbors(tempsi);
+                        // Get neighbor number
+                        int nn = (std::get<0>(*itrNn)+3)%6;
+                        std::tuple<int, int, int, int> deadCell;
+                        std::get<0>(deadCell) = std::get<1>(prevLayerNeighbors[nn]);
+                        std::get<1>(deadCell) = std::get<2>(prevLayerNeighbors[nn]);
+                        std::get<2>(deadCell) = std::get<3>(prevLayerNeighbors[nn]);
+                        std::get<3>(deadCell) = std::get<4>(prevLayerNeighbors[nn]);
+                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                            if( (*itr)[0] == layer+1 &&
+                            (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
+                            (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
+                            ){
+                                (*itr)[n+22] = lenergy;
+                            }
                         }
                     }
                 }
             }
         }
+        // Fill histograms
+        double rechitsumave=rechitsumlaypn+rechitsumdead_Si;
+        h_rechitsumave->Fill(rechitsumave);
+        h_rechitsum->Fill(rechitsum);
+        h_rechitsumdead_Si->Fill(rechitsumdead_Si);
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
@@ -495,9 +764,29 @@ int main(int argc, char** argv){
                 MLcellV  = (*itr)[4];
                 MLeta    = (*itr)[5];
                 MLphi    = (*itr)[6];
-                MLdead   = (*itr)[7];
-                MLevent  = (*itr)[8];
-                MLrechitsum = MLrechitsum;
+                MLn1     = (*itr)[7];
+                MLn2     = (*itr)[8];
+                MLn3     = (*itr)[9];
+                MLn4     = (*itr)[10];
+                MLn5     = (*itr)[11];
+                MLn6     = (*itr)[12];
+                MLdead   = (*itr)[13];
+                MLnup    = (*itr)[14];
+                MLndown  = (*itr)[15];
+                MLun1    = (*itr)[16];
+                MLun2    = (*itr)[17];
+                MLun3    = (*itr)[18];
+                MLun4    = (*itr)[19];
+                MLun5    = (*itr)[20];
+                MLun6    = (*itr)[21];
+                MLdn1    = (*itr)[22];
+                MLdn2    = (*itr)[23];
+                MLdn3    = (*itr)[24];
+                MLdn4    = (*itr)[26];
+                MLdn5    = (*itr)[27];
+                MLdn6    = (*itr)[28];
+                MLevent  = (*itr)[29];
+                MLrechitsum = rechitsumdead_Si;
                 t1->Fill();
             }
         }
