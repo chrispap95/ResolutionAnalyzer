@@ -434,7 +434,6 @@ int main(int argc, char** argv){
         if (debug) std::cout << " - Event contains " << (*rechitEnergy).size()
         << " rechits." << std::endl;
         double coneSize = 0.3;
-        MLrechitsum = 0;
 
         // Loop over hits of event
         for (unsigned iH(0); iH<(*rechitEnergy).size(); ++iH){
@@ -462,7 +461,9 @@ int main(int argc, char** argv){
 
                 // Calculate energy without dead Si cells
                 if(ibc == deadlistsi.end()) {
-                    MLrechitsum += lenergy;
+                    for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                        (*itr)[9] += lenergy;
+                    }
                 }else {
                     // Do stuff with dead cells
                     /* ML code
@@ -485,6 +486,7 @@ int main(int argc, char** argv){
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
+            bool check = 1;
             if ((*itr)[5] > 0) {
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
@@ -498,7 +500,9 @@ int main(int argc, char** argv){
                 MLphi    = (*itr)[6];
                 MLdead   = (*itr)[7];
                 MLevent  = (*itr)[8];
+                MLrechitsum = (*itr)[9];
                 t1->Fill();
+                std::cout << MLrechitsum << ", " << MLdead << std::endl;
             }
         }
         ievtRec++;
