@@ -504,7 +504,7 @@ int main(int argc, char** argv){
                 t1->Fill();
                 if (check) {
                     check = 0;
-                    std::cout << MLevent << ", " MLlayer << ", "
+                    std::cout << MLevent << ", " << MLlayer << ", "
                     << MLwaferU << ", " << MLwaferV << ", "
                     << MLcellU  << ", " << MLcellV  << ", "
                     << MLdead << std::endl;
