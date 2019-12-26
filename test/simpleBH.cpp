@@ -502,7 +502,10 @@ int main(int argc, char** argv){
                 MLevent  = (*itr)[8];
                 MLrechitsum = (*itr)[9];
                 t1->Fill();
-                std::cout << MLrechitsum << ", " << MLdead << std::endl;
+                if (check) {
+                    check = 0;
+                    std::cout << MLrechitsum << ", " << MLdead << std::endl;
+                }
             }
         }
         ievtRec++;
