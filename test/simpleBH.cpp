@@ -520,7 +520,7 @@ int main(int argc, char** argv){
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
-                            (*itr)[14] = lenergy;
+                            (*itr)[10] = lenergy;
                         }
                     }
                 }
@@ -530,7 +530,7 @@ int main(int argc, char** argv){
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
-                            (*itr)[15] = lenergy;
+                            (*itr)[11] = lenergy;
                         }
                     }
                 }
