@@ -274,7 +274,8 @@ int main(int argc, char** argv){
     **********************************/
     float MLlayer, MLeta, MLphi, MLdead, MLevent;
     float MLwaferU, MLwaferV, MLcellU, MLcellV;
-    float MLrechitsum;
+    float MLrhsum;
+    float MLnup, MLndown;
     TTree* t1 = new TTree("t1","sample");
     t1->Branch("MLlayer"    ,&MLlayer    ,"MLlayer/F"    );
     t1->Branch("MLwaferU"   ,&MLwaferU   ,"MLwaferU/F"   );
@@ -285,7 +286,9 @@ int main(int argc, char** argv){
     t1->Branch("MLphi"      ,&MLphi      ,"MLphi/F"      );
     t1->Branch("MLdead"     ,&MLdead     ,"MLdead/F"     );
     t1->Branch("MLevent"    ,&MLevent    ,"MLevent/F"    );
-    t1->Branch("MLrechitsum",&MLrechitsum,"MLrechitsum/F");
+    t1->Branch("MLrechitsum",&MLrhsum    ,"MLrechitsum/F");
+    t1->Branch("MLnup"      ,&MLnup      ,"MLnup/F"      );
+    t1->Branch("MLndown"    ,&MLndown    ,"MLndown/F"    );
 
     /*
     ** Define a vector of the array:
@@ -294,16 +297,19 @@ int main(int argc, char** argv){
     **      eta, phi,
     **      rechit,
     **      MLevent,
-    **      MLrechitsum
+    **      MLrhsum,
+    **      MLnup, MLndown
     ** }
     */
-    std::vector<std::array<float, 10>> MLvectorev;
+    std::vector<std::array<float, 12>> MLvectorev;
 
     /**********************************
     ** for missing channel study
     **********************************/
     // SILICON
     std::set<std::tuple<int, int, int, int, int>> deadlistsi;
+    std::set<std::tuple<int, int, int, int, int, int>> adj_to_dead;
+
 
     // Kill cells and calculate statistics on adjacent dead cells
     unsigned N_try_success = 0; // Number of killed cells
@@ -330,8 +336,25 @@ int main(int argc, char** argv){
                             );
                             deadlistsi.insert(deadCell);
 
-                            std::array<float, 10> temp_vector;
-                            for(unsigned k(0); k < 10; ++k) temp_vector[k] = 0;
+                            adj_to_dead.insert({
+                                0, //corresponds to cell bellow
+                                std::get<0>(deadCell)-1,
+                                std::get<1>(deadCell),
+                                std::get<2>(deadCell),
+                                std::get<3>(deadCell),
+                                std::get<4>(deadCell)
+                            });
+                            adj_to_dead.insert({
+                                1, //corresponds to cell above
+                                std::get<0>(deadCell)+1,
+                                std::get<1>(deadCell),
+                                std::get<2>(deadCell),
+                                std::get<3>(deadCell),
+                                std::get<4>(deadCell)
+                            });
+
+                            std::array<float, 12> temp_vector;
+                            for(unsigned k(0); k < 12; ++k) temp_vector[k] = 0;
                             temp_vector[0] = (float)lr; //layer
                             temp_vector[1] = (float)waferU; //dead cell's waferU
                             temp_vector[2] = (float)waferV; //dead cell's waferV
@@ -396,7 +419,7 @@ int main(int argc, char** argv){
     // Loop over entries (events)
     for (unsigned ievt(0); ievt<nEvts; ++ievt){
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
-            for(unsigned k(5); k < 10; ++k) (*itr)[k] = 0;
+            for(unsigned k(5); k < 12; ++k) (*itr)[k] = 0;
         }
         if (ievtRec>=lRecTree->GetEntries()) continue;
         Long64_t local_entry = lRecTree->LoadTree(ievt);
@@ -481,6 +504,38 @@ int main(int argc, char** argv){
                         }
                     }
                 }
+
+                std::tuple<int, int, int, int, int, int> tempsiU(
+                    1,layer,waferU,waferV,cellU,cellV
+                );
+                std::tuple<int, int, int, int, int, int> tempsiD(
+                    0,layer,waferU,waferV,cellU,cellV
+                );
+                std::set<std::tuple<int, int, int, int, int, int>>::iterator itrU=adj_to_dead.find(tempsiU);
+                std::set<std::tuple<int, int, int, int, int, int>>::iterator itrD=adj_to_dead.find(tempsiD);
+
+                if(itrU!=adj_to_dead.end()) {
+                    rechitsumlaypn += lenergy/2;
+                    for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                        if( (*itr)[0] == layer-1 &&
+                            (*itr)[1] == waferU && (*itr)[2] == waferV &&
+                            (*itr)[3] == cellU  && (*itr)[4] == cellV
+                        ){
+                            (*itr)[14] = lenergy;
+                        }
+                    }
+                }
+                if(itrD!=adj_to_dead.end()) {
+                    rechitsumlaypn += lenergy/2;
+                    for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
+                        if( (*itr)[0] == layer+1 &&
+                            (*itr)[1] == waferU && (*itr)[2] == waferV &&
+                            (*itr)[3] == cellU  && (*itr)[4] == cellV
+                        ){
+                            (*itr)[15] = lenergy;
+                        }
+                    }
+                }
             }
         }
 
@@ -500,14 +555,16 @@ int main(int argc, char** argv){
                 MLphi    = (*itr)[6];
                 MLdead   = (*itr)[7];
                 MLevent  = (*itr)[8];
-                MLrechitsum = (*itr)[9];
+                MLrhsum = (*itr)[9];
+                MLnup    = (*itr)[10];
+                MLndown  = (*itr)[11];
                 t1->Fill();
                 if (check) {
                     check = 0;
                     std::cout << MLevent << ", " << MLlayer << ", "
                     << MLwaferU << ", " << MLwaferV << ", "
                     << MLcellU  << ", " << MLcellV  << ", "
-                    << MLdead << std::endl;
+                    << MLdead << ", " << MLnup << ", " << MLndown << ", " << std::endl;
                 }
             }
         }
