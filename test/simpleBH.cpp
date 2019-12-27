@@ -515,7 +515,6 @@ int main(int argc, char** argv){
                 std::set<std::tuple<int, int, int, int, int, int>>::iterator itrD=adj_to_dead.find(tempsiD);
 
                 if(itrU!=adj_to_dead.end()) {
-                    rechitsumlaypn += lenergy/2;
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer-1 &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
@@ -526,7 +525,6 @@ int main(int argc, char** argv){
                     }
                 }
                 if(itrD!=adj_to_dead.end()) {
-                    rechitsumlaypn += lenergy/2;
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer+1 &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
