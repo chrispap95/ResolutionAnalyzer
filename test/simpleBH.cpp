@@ -794,9 +794,9 @@ int main(int argc, char** argv){
                     std::cout << MLevent << ", " << MLlayer << ", "
                     << MLwaferU << ", " << MLwaferV << ", "
                     << MLcellU  << ", " << MLcellV  << ", "
-                    << MLdead << ", " << MLn1 << ", " << MLn2 << ", "
-                    <<  MLn3 << ", " << MLn4 << ", " <<  MLn5 << ", "
-                    << MLn6 << ", " << std::endl;
+                    << MLdead << ", " << MLdn1 << ", " << MLdn2 << ", "
+                    << MLdn3  << ", " << MLdn4 << ", " << MLdn5 << ", "
+                    << MLdn6  << ", " << std::endl;
                 }
             }
         }
