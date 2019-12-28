@@ -674,7 +674,7 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        bool check = 0;
+                        bool check = 1;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
@@ -714,6 +714,10 @@ int main(int argc, char** argv){
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+16] = lenergy;
+                                std::cout << n << ", " << ievt << ", " << (*itr)[0] << ", "
+                                << (*itr)[1] << ", " << (*itr)[2] << ", "
+                                << (*itr)[3] << ", " << (*itr)[4] << ", "
+                                << (*itr)[13] << ", " << lenergy << std::endl;
                             }
                         }
                     }
@@ -753,7 +757,7 @@ int main(int argc, char** argv){
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
-            bool check = 1;
+            bool check = 0;
             if ((*itr)[5] > 0) {
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
@@ -794,9 +798,9 @@ int main(int argc, char** argv){
                     std::cout << MLevent << ", " << MLlayer << ", "
                     << MLwaferU << ", " << MLwaferV << ", "
                     << MLcellU  << ", " << MLcellV  << ", "
-                    << MLdead << ", " << MLdn1 << ", " << MLdn2 << ", "
-                    << MLdn3  << ", " << MLdn4 << ", " << MLdn5 << ", "
-                    << MLdn6  << ", " << std::endl;
+                    << MLdead << ", " << MLun1 << ", " << MLun2 << ", "
+                    << MLun3  << ", " << MLun4 << ", " << MLun5 << ", "
+                    << MLun6  << ", " << std::endl;
                 }
             }
         }
