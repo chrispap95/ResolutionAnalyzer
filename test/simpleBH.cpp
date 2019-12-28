@@ -753,6 +753,7 @@ int main(int argc, char** argv){
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
+            bool check = 1;
             if ((*itr)[5] > 0) {
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
@@ -788,6 +789,13 @@ int main(int argc, char** argv){
                 MLevent  = (*itr)[29];
                 MLrechitsum = rechitsumdead_Si;
                 t1->Fill();
+                if (check) {
+                    check = 0;
+                    std::cout << MLevent << ", " << MLlayer << ", "
+                    << MLwaferU << ", " << MLwaferV << ", "
+                    << MLcellU  << ", " << MLcellV  << ", "
+                    << MLdead << ", " << MLnup << ", " << MLndown << ", " << std::endl;
+                }
             }
         }
         ievtRec++;
