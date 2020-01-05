@@ -685,6 +685,7 @@ int main(int argc, char** argv){
                                 (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+7] = lenergy;
+                                check = 1;
                             }
                         }
                         if(check) {
@@ -715,7 +716,6 @@ int main(int argc, char** argv){
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+16] = lenergy;
-                                check = 1;
                             }
                         }
                     }
