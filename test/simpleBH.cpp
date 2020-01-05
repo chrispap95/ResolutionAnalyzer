@@ -674,7 +674,7 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        std::cout << n << ", " << ievt << ", " << layer-1 << ", "
+                        std::cout << "S: " << n << ", " << ievt << ", " << layer-1 << ", "
                         << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
                         << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
                         << lenergy;
@@ -710,13 +710,24 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
+                        std::cout << "U: " << n << ", " << ievt << ", " << layer-1 << ", "
+                        << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
+                        << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
+                        << lenergy;
+                        bool check = 0;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer-1 &&
                             (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+16] = lenergy;
+                                check = 1;
                             }
+                        }
+                        if(check) {
+                            std::cout << "  \tok" << std::endl;
+                        }else {
+                            std::cout << std::endl;
                         }
                     }
 
