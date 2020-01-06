@@ -279,8 +279,6 @@ int main(int argc, char** argv){
     float MLlayer, MLeta, MLphi, MLdead, MLnup, MLndown, MLevent;
     float MLwaferU, MLwaferV, MLcellU, MLcellV;
     float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6;
-    float MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6;
-    float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6;
     float MLrechitsum;
     TTree* t1 = new TTree("t1","sample");
     t1->Branch("MLlayer"    ,&MLlayer    ,"MLlayer/F"    );
@@ -299,18 +297,6 @@ int main(int argc, char** argv){
     t1->Branch("MLdead"     ,&MLdead     ,"MLdead/F"     );
     t1->Branch("MLnup"      ,&MLnup      ,"MLnup/F"      );
     t1->Branch("MLndown"    ,&MLndown    ,"MLndown/F"    );
-    t1->Branch("MLun1"      ,&MLun1      ,"MLun1/F"      );
-    t1->Branch("MLun2"      ,&MLun2      ,"MLun2/F"      );
-    t1->Branch("MLun3"      ,&MLun3      ,"MLun3/F"      );
-    t1->Branch("MLun4"      ,&MLun4      ,"MLun4/F"      );
-    t1->Branch("MLun5"      ,&MLun5      ,"MLun5/F"      );
-    t1->Branch("MLun6"      ,&MLun6      ,"MLun6/F"      );
-    t1->Branch("MLdn1"      ,&MLdn1      ,"MLdn1/F"      );
-    t1->Branch("MLdn2"      ,&MLdn2      ,"MLdn2/F"      );
-    t1->Branch("MLdn3"      ,&MLdn3      ,"MLdn3/F"      );
-    t1->Branch("MLdn4"      ,&MLdn4      ,"MLdn4/F"      );
-    t1->Branch("MLdn5"      ,&MLdn5      ,"MLdn5/F"      );
-    t1->Branch("MLdn6"      ,&MLdn6      ,"MLdn6/F"      );
     t1->Branch("MLevent"    ,&MLevent    ,"MLevent/F"    );
     t1->Branch("MLrechitsum",&MLrechitsum,"MLrechitsum/F");
 
@@ -674,84 +660,12 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        std::cout << "S: " << n << ", " << ievt << ", " << layer-1 << ", "
-                        << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
-                        << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
-                        << lenergy;
-                        bool check = 0;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer &&
                                 (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
                                 (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+7] = lenergy;
-                                check = 1;
-                            }
-                        }
-                        if(check) {
-                            std::cout << " \tok" << std::endl;
-                        }else {
-                            std::cout << std::endl;
-                        }
-                    }
-
-                    // Next layer neighbors
-                    std::tuple<int, int, int, int, int, int> tempsiUNn(
-                        n,layer-1,waferU,waferV,cellU,cellV
-                    );
-                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
-                    if(itrUNn!=adj_to_dead_inlay.end()) {
-                        std::vector<std::tuple<int,int,int,int,int>> nextLayerNeighbors;
-                        nextLayerNeighbors = getNeighbors(tempsi);
-                        // Get neighbor number
-                        int nn = (std::get<0>(*itrNn)+3)%6;
-                        std::tuple<int, int, int, int> deadCell;
-                        std::get<0>(deadCell) = std::get<1>(nextLayerNeighbors[nn]);
-                        std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
-                        std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
-                        std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
-                        std::cout << "U: " << n << ", " << ievt << ", " << layer-1 << ", "
-                        << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
-                        << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
-                        << lenergy;
-                        bool check = 0;
-                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
-                            if( (*itr)[0] == layer-1 &&
-                            (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
-                            (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
-                            ){
-                                (*itr)[n+16] = lenergy;
-                                check = 1;
-                            }
-                        }
-                        if(check) {
-                            std::cout << "  \tok" << std::endl;
-                        }else {
-                            std::cout << std::endl;
-                        }
-                    }
-
-                    // Previous layer neighbors
-                    std::tuple<int, int, int, int, int, int> tempsiDNn(
-                        n,layer+1,waferU,waferV,cellU,cellV
-                    );
-                    std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
-                    if(itrDNn!=adj_to_dead_inlay.end()) {
-                        std::vector<std::tuple<int,int,int,int,int>> prevLayerNeighbors;
-                        prevLayerNeighbors = getNeighbors(tempsi);
-                        // Get neighbor number
-                        int nn = (std::get<0>(*itrNn)+3)%6;
-                        std::tuple<int, int, int, int> deadCell;
-                        std::get<0>(deadCell) = std::get<1>(prevLayerNeighbors[nn]);
-                        std::get<1>(deadCell) = std::get<2>(prevLayerNeighbors[nn]);
-                        std::get<2>(deadCell) = std::get<3>(prevLayerNeighbors[nn]);
-                        std::get<3>(deadCell) = std::get<4>(prevLayerNeighbors[nn]);
-                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
-                            if( (*itr)[0] == layer+1 &&
-                            (*itr)[1] == std::get<0>(deadCell) && (*itr)[2] == std::get<1>(deadCell) &&
-                            (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
-                            ){
-                                (*itr)[n+22] = lenergy;
                             }
                         }
                     }
@@ -766,7 +680,6 @@ int main(int argc, char** argv){
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
-            bool check = 0;
             if ((*itr)[5] > 0) {
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
@@ -787,30 +700,9 @@ int main(int argc, char** argv){
                 MLdead   = (*itr)[13];
                 MLnup    = (*itr)[14];
                 MLndown  = (*itr)[15];
-                MLun1    = (*itr)[16];
-                MLun2    = (*itr)[17];
-                MLun3    = (*itr)[18];
-                MLun4    = (*itr)[19];
-                MLun5    = (*itr)[20];
-                MLun6    = (*itr)[21];
-                MLdn1    = (*itr)[22];
-                MLdn2    = (*itr)[23];
-                MLdn3    = (*itr)[24];
-                MLdn4    = (*itr)[26];
-                MLdn5    = (*itr)[27];
-                MLdn6    = (*itr)[28];
                 MLevent  = (*itr)[29];
                 MLrechitsum = rechitsumdead_Si;
                 t1->Fill();
-                if (check) {
-                    check = 0;
-                    std::cout << MLevent << ", " << MLlayer << ", "
-                    << MLwaferU << ", " << MLwaferV << ", "
-                    << MLcellU  << ", " << MLcellV  << ", "
-                    << MLdead << ", " << MLun1 << ", " << MLun2 << ", "
-                    << MLun3  << ", " << MLun4 << ", " << MLun5 << ", "
-                    << MLun6  << ", " << std::endl;
-                }
             }
         }
         ievtRec++;
