@@ -351,6 +351,7 @@ int main(int argc, char** argv){
     /* Loops over all possible cells and kills them with a probability
     ** given by the dead fraction.
     */
+    std::cout << "Print out dead cells list: \n";
     TRandom3 r(0);
     for(int lr = 1; lr <= 28; ++lr) {
         for(int waferU = -12; waferU <= 12; ++waferU) {
@@ -368,6 +369,8 @@ int main(int argc, char** argv){
                                 cellV
                             );
                             deadlistsi.insert(deadCell);
+                            std::cout << lr << ", " << waferU << ", " << waferV
+                            << ", " << cellU << ", " << cellV << "\n";
 
                             adj_to_dead.insert({
                                 0, //corresponds to cell bellow
@@ -521,6 +524,7 @@ int main(int argc, char** argv){
 
     unsigned ievtRec = 0;
 
+    if (!ievt) std::cout << "Event 0 print out: \n";
     // Loop over entries (events)
     for (unsigned ievt(0); ievt<nEvts; ++ievt){
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
@@ -595,6 +599,8 @@ int main(int argc, char** argv){
             **     - in positive endcap
             */
             if(!index && zh > 0 && dR < coneSize) {
+                std::cout << layer << ", " << waferU << ", " << waferV << ", "
+                << cellU << ", " << cellV << ", " << lenergy;
                 rechitsum += lenergy;
                 std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
                 std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistsi.find(tempsi);
@@ -603,11 +609,13 @@ int main(int argc, char** argv){
                 if(ibc == deadlistsi.end()) {
                     rechitsumdead_Si += lenergy;
                     MLrechitsum += lenergy;
+                    std::cout << "\n";
                 }else {
                     // Do stuff with dead cells
                     /* ML code
                     ** Input dead cells eta, phi and rechits
                     */
+                    std::cout << " \t dead\n";
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
@@ -674,7 +682,7 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(sameLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(sameLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(sameLayerNeighbors[nn]);
-                        std::cout << "S: " << n << ", " << ievt << ", " << layer-1 << ", "
+                        std::cout << "S: " << n << ", " << ievt << ", " << layer << ", "
                         << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
                         << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
                         << lenergy;
@@ -710,10 +718,10 @@ int main(int argc, char** argv){
                         std::get<1>(deadCell) = std::get<2>(nextLayerNeighbors[nn]);
                         std::get<2>(deadCell) = std::get<3>(nextLayerNeighbors[nn]);
                         std::get<3>(deadCell) = std::get<4>(nextLayerNeighbors[nn]);
-                        std::cout << "U: " << n << ", " << ievt << ", " << layer-1 << ", "
-                        << std::get<0>(deadCell) << ", " << std::get<1>(deadCell) << ", "
-                        << std::get<2>(deadCell) << ", " << std::get<3>(deadCell) << ", "
-                        << lenergy;
+                        std::cout << "U: " << n << ", " << nn << ", " << ievt << ", "
+                        << layer-1 << ", " << std::get<0>(deadCell) << ", "
+                        << std::get<1>(deadCell) << ", " << std::get<2>(deadCell)
+                        << ", " << std::get<3>(deadCell) << ", " << lenergy;
                         bool check = 0;
                         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer-1 &&
