@@ -44,3 +44,7 @@ docker_stderror
 
 # ROOT files
 *.root
+
+# Condor and Project related files
+*.jdl
+*.cfg
