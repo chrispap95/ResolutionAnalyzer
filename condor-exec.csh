@@ -17,7 +17,7 @@ make
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:lib
 #echo "Arguments passed to this script are: for 1: $1, and for 2: $2"
 ./bin/simpleBH -c scripts/$1
-xrdcp -f $2 root://cmseos.fnal.gov//store/user/chpapage/$2
+xrdcp -f $2 root://cmseos.fnal.gov//store/user/chpapage/DeadCellsSamples/EvaluationSamples/$2
 ### remove the output file if you don't want it automatically transferred when the job ends
 rm $2
 cd ${_CONDOR_SCRATCH_DIR}
