@@ -2,6 +2,7 @@
 *.stderr
 *.stdout
 *.log
+*.txt
 docker_stderror
 
 # Tar files

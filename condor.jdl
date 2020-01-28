@@ -3,6 +3,7 @@ Executable = condor-exec.csh
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
 Transfer_Input_Files = condor-exec.csh, CMSSW_10_6_3_patch1.tgz
+Arguments = simpleBH_E0to120Eta1p7_df01.cfg 
 Output = simpleBH_$(Cluster)_$(Process).stdout
 Error = simpleBH_$(Cluster)_$(Process).stderr
 Log = simpleBH_$(Cluster)_$(Process).log
