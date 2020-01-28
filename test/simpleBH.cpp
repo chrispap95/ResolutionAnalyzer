@@ -234,7 +234,7 @@ int main(int argc, char** argv){
         lRecTree->AddFile(inputrec.str().c_str());
     }
     else {
-        for (unsigned i = firstRun;i<=nRuns;++i){
+        for (unsigned i = firstRun;i<=nRuns+firstRun;++i){
             std::ostringstream lstrrec;
             lstrrec << inputrec.str() << "_" << i << ".root";
             lRecTree->AddFile(lstrrec.str().c_str());
