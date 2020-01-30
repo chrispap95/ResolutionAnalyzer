@@ -171,7 +171,7 @@ int main(int argc, char** argv){
     std::string outFilePath;
     std::string filePath;
     std::string digifilePath;
-    unsigned nRuns;
+    unsigned nRuns,firstRun;
     std::string recoFileName;
     std::string MLFilePath;
     unsigned debug;
@@ -190,6 +190,7 @@ int main(int argc, char** argv){
     ("filePath,i",      po::value<std::string>(&filePath)->required())
     ("recoFileName,r",  po::value<std::string>(&recoFileName)->required())
     ("nRuns",           po::value<unsigned>(&nRuns)->default_value(0))
+    ("firstRun",        po::value<unsigned>(&firstRun)->default_value(1))
     ("debug,d",         po::value<unsigned>(&debug)->default_value(0))
     ("deadfrac",        po::value<double>(&deadfrac)->default_value(0))
     //Restrict number of adjacent dead cells
@@ -233,7 +234,7 @@ int main(int argc, char** argv){
         lRecTree->AddFile(inputrec.str().c_str());
     }
     else {
-        for (unsigned i(1);i<=nRuns;++i){
+        for (unsigned i = firstRun;i<=nRuns+firstRun;++i){
             std::ostringstream lstrrec;
             lstrrec << inputrec.str() << "_" << i << ".root";
             lRecTree->AddFile(lstrrec.str().c_str());
