@@ -521,7 +521,6 @@ int main(int argc, char** argv){
 
     unsigned ievtRec = 0;
 
-    if (!ievt) std::cout << "Event 0 print out: \n";
     // Loop over entries (events)
     for (unsigned ievt(0); ievt<nEvts; ++ievt){
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
