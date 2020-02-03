@@ -617,7 +617,7 @@ int main(int argc, char** argv){
                             (*itr)[5] = leta;
                             (*itr)[6] = lphi;
                             (*itr)[13] = lenergy;
-                            (*itr)[29] = (float)ievt;
+                            (*itr)[28] = (float)ievt;
                         }
                     }
                 }
@@ -774,10 +774,10 @@ int main(int argc, char** argv){
                 MLdn1    = (*itr)[22];
                 MLdn2    = (*itr)[23];
                 MLdn3    = (*itr)[24];
-                MLdn4    = (*itr)[26];
-                MLdn5    = (*itr)[27];
-                MLdn6    = (*itr)[28];
-                MLevent  = (*itr)[29];
+                MLdn4    = (*itr)[25];
+                MLdn5    = (*itr)[26];
+                MLdn6    = (*itr)[27];
+                MLevent  = (*itr)[28];
                 MLrechitsum = rechitsumdead_Si;
                 t1->Fill();
             }
