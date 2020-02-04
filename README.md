@@ -37,7 +37,7 @@ scram b
 Then, prepare your CMSSW to trasfer it to the nodes by issuing
 ```bash
 cd ResolutionAnalyzer
-sh condorPrepare.sh
+sh prepareCondor.sh
 ```
 
 Then, submit a job
