@@ -13,7 +13,7 @@ make
 ## Execute code
 To execute the code
 ```bash
-./bin/simpleBH -c script/simpleBH.cfg
+./bin/simpleBH -c scripts/simpleBH.cfg
 ```
 
 You can view the output
