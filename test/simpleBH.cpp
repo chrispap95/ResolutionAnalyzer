@@ -417,6 +417,14 @@ int main(int argc, char** argv){
         }
     }
 
+    /* This extra vector makes sure the information is passed even if there are
+    ** no available dead rechits.
+    */
+
+    std::array<float, 30> buffer_vector;
+    for(unsigned k(0); k < 30; ++k) buffer_vector[k] = -1;
+    MLvectorev.push_back(buffer_vector);
+
     std::cout << "List of dead Si cells was created successfully. \n"
     << "Killed " << N_try_success << " cells using " << N_try_all << " trials.\n"
     << std::endl;
@@ -742,10 +750,13 @@ int main(int argc, char** argv){
         h_rechitsumave->Fill(rechitsumave);
         h_rechitsum->Fill(rechitsum);
         h_rechitsumdead_Si->Fill(rechitsumdead_Si);
+        for(auto it) {
+
+        }
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
-            if ((*itr)[5] > 0) {
+            if ((*itr)[5] > 0 || (*itr)[5]==-1) {
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
                 */
