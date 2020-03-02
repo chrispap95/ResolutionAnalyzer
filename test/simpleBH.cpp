@@ -753,7 +753,7 @@ int main(int argc, char** argv){
 
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); ++itr) {
-            if ((*itr)[5] > 0 || (*itr)[5]==-1) {
+            if ((*itr)[5] > 0 || (*itr)[0]==-1) {
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
                 */
