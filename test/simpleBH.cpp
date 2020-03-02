@@ -785,7 +785,7 @@ int main(int argc, char** argv){
                 MLdn4    = (*itr)[25];
                 MLdn5    = (*itr)[26];
                 MLdn6    = (*itr)[27];
-                MLevent  = (*itr)[28];
+                MLevent  = (float)ievt;//(*itr)[28];
                 MLrechitsum = rechitsumdead_Si;
                 t1->Fill();
             }
