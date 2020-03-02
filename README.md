@@ -13,7 +13,7 @@ make
 ## Execute code
 To execute the code
 ```bash
-./bin/simpleBH -c script/simpleBH.cfg
+./bin/simpleBH -c scripts/simpleBH.cfg
 ```
 
 You can view the output
@@ -37,7 +37,7 @@ scram b
 Then, prepare your CMSSW to trasfer it to the nodes by issuing
 ```bash
 cd ResolutionAnalyzer
-sh condorPrepare.sh
+sh prepareCondor.sh
 ```
 
 Then, submit a job
