@@ -607,6 +607,7 @@ int main(int argc, char** argv){
                 rechitsum += lenergy;
                 std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
                 std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistsi.find(tempsi);
+                bool isDead = false;
 
                 // Calculate energy without dead Si cells
                 if(ibc == deadlistsi.end()) {
@@ -617,6 +618,7 @@ int main(int argc, char** argv){
                     /* ML code
                     ** Input dead cells eta, phi and rechits
                     */
+                    isDead = true;
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                         if( (*itr)[0] == layer &&
                             (*itr)[1] == waferU && (*itr)[2] == waferV &&
@@ -650,6 +652,7 @@ int main(int argc, char** argv){
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
                             (*itr)[14] = lenergy;
+                            if(isDead) (*itr)[14] = -100;
                         }
                     }
                 }
@@ -661,6 +664,7 @@ int main(int argc, char** argv){
                             (*itr)[3] == cellU  && (*itr)[4] == cellV
                         ){
                             (*itr)[15] = lenergy;
+                            if(isDead) (*itr)[15] = -100;
                         }
                     }
                 }
@@ -689,6 +693,7 @@ int main(int argc, char** argv){
                                 (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+7] = lenergy;
+                                if(isDead) (*itr)[n+7] = -100;
                             }
                         }
                     }
@@ -714,6 +719,7 @@ int main(int argc, char** argv){
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+16] = lenergy;
+                                if(isDead) (*itr)[n+16] = -100;
                             }
                         }
                     }
@@ -739,6 +745,7 @@ int main(int argc, char** argv){
                             (*itr)[3] == std::get<2>(deadCell) && (*itr)[4] == std::get<3>(deadCell)
                             ){
                                 (*itr)[n+22] = lenergy;
+                                if(isDead) (*itr)[n+22] = -100;
                             }
                         }
                     }
