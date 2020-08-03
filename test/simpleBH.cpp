@@ -284,36 +284,36 @@ int main(int argc, char** argv){
     float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6;
     float MLrechitsum;
     TTree* t1 = new TTree("t1","sample");
-    t1->Branch("MLlayer"    ,&MLlayer    ,"MLlayer/F"    );
-    t1->Branch("MLwaferU"   ,&MLwaferU   ,"MLwaferU/F"   );
-    t1->Branch("MLwaferV"   ,&MLwaferV   ,"MLwaferV/F"   );
-    t1->Branch("MLcellU"    ,&MLcellU    ,"MLcellU/F"    );
-    t1->Branch("MLcellV"    ,&MLcellV    ,"MLcellV/F"    );
-    t1->Branch("MLeta"      ,&MLeta      ,"MLeta/F"      );
-    t1->Branch("MLphi"      ,&MLphi      ,"MLphi/F"      );
-    t1->Branch("MLn1"       ,&MLn1       ,"MLn1/F"       );
-    t1->Branch("MLn2"       ,&MLn2       ,"MLn2/F"       );
-    t1->Branch("MLn3"       ,&MLn3       ,"MLn3/F"       );
-    t1->Branch("MLn4"       ,&MLn4       ,"MLn4/F"       );
-    t1->Branch("MLn5"       ,&MLn5       ,"MLn5/F"       );
-    t1->Branch("MLn6"       ,&MLn6       ,"MLn6/F"       );
-    t1->Branch("MLdead"     ,&MLdead     ,"MLdead/F"     );
-    t1->Branch("MLnup"      ,&MLnup      ,"MLnup/F"      );
-    t1->Branch("MLndown"    ,&MLndown    ,"MLndown/F"    );
-    t1->Branch("MLun1"      ,&MLun1      ,"MLun1/F"      );
-    t1->Branch("MLun2"      ,&MLun2      ,"MLun2/F"      );
-    t1->Branch("MLun3"      ,&MLun3      ,"MLun3/F"      );
-    t1->Branch("MLun4"      ,&MLun4      ,"MLun4/F"      );
-    t1->Branch("MLun5"      ,&MLun5      ,"MLun5/F"      );
-    t1->Branch("MLun6"      ,&MLun6      ,"MLun6/F"      );
-    t1->Branch("MLdn1"      ,&MLdn1      ,"MLdn1/F"      );
-    t1->Branch("MLdn2"      ,&MLdn2      ,"MLdn2/F"      );
-    t1->Branch("MLdn3"      ,&MLdn3      ,"MLdn3/F"      );
-    t1->Branch("MLdn4"      ,&MLdn4      ,"MLdn4/F"      );
-    t1->Branch("MLdn5"      ,&MLdn5      ,"MLdn5/F"      );
-    t1->Branch("MLdn6"      ,&MLdn6      ,"MLdn6/F"      );
-    t1->Branch("MLevent"    ,&MLevent    ,"MLevent/F"    );
-    t1->Branch("MLrechitsum",&MLrechitsum,"MLrechitsum/F");
+    t1->Branch("layer"    ,&MLlayer    ,"layer/F"    );
+    t1->Branch("waferU"   ,&MLwaferU   ,"waferU/F"   );
+    t1->Branch("waferV"   ,&MLwaferV   ,"waferV/F"   );
+    t1->Branch("cellU"    ,&MLcellU    ,"cellU/F"    );
+    t1->Branch("cellV"    ,&MLcellV    ,"cellV/F"    );
+    t1->Branch("eta"      ,&MLeta      ,"eta/F"      );
+    t1->Branch("phi"      ,&MLphi      ,"phi/F"      );
+    t1->Branch("n1"       ,&MLn1       ,"n1/F"       );
+    t1->Branch("n2"       ,&MLn2       ,"n2/F"       );
+    t1->Branch("n3"       ,&MLn3       ,"n3/F"       );
+    t1->Branch("n4"       ,&MLn4       ,"n4/F"       );
+    t1->Branch("n5"       ,&MLn5       ,"n5/F"       );
+    t1->Branch("n6"       ,&MLn6       ,"n6/F"       );
+    t1->Branch("dead"     ,&MLdead     ,"dead/F"     );
+    t1->Branch("nup"      ,&MLnup      ,"nup/F"      );
+    t1->Branch("ndown"    ,&MLndown    ,"ndown/F"    );
+    t1->Branch("un1"      ,&MLun1      ,"un1/F"      );
+    t1->Branch("un2"      ,&MLun2      ,"un2/F"      );
+    t1->Branch("un3"      ,&MLun3      ,"un3/F"      );
+    t1->Branch("un4"      ,&MLun4      ,"un4/F"      );
+    t1->Branch("un5"      ,&MLun5      ,"un5/F"      );
+    t1->Branch("un6"      ,&MLun6      ,"un6/F"      );
+    t1->Branch("dn1"      ,&MLdn1      ,"dn1/F"      );
+    t1->Branch("dn2"      ,&MLdn2      ,"dn2/F"      );
+    t1->Branch("dn3"      ,&MLdn3      ,"dn3/F"      );
+    t1->Branch("dn4"      ,&MLdn4      ,"dn4/F"      );
+    t1->Branch("dn5"      ,&MLdn5      ,"dn5/F"      );
+    t1->Branch("dn6"      ,&MLdn6      ,"dn6/F"      );
+    t1->Branch("event"    ,&MLevent    ,"event/F"    );
+    t1->Branch("rechitsum",&MLrechitsum,"rechitsum/F");
 
     /*
     ** Define a vector of the array:
@@ -505,7 +505,6 @@ int main(int argc, char** argv){
     std::vector<float   > *rechitPosy   = 0;
     std::vector<float   > *rechitPosz   = 0;
     std::vector<int     > *rechitLayer  = 0;
-    std::vector<int     > *rechitIndex  = 0;
     std::vector<int     > *rechitWaferU = 0;
     std::vector<int     > *rechitWaferV = 0;
     std::vector<int     > *rechitCellU  = 0;
@@ -513,25 +512,25 @@ int main(int argc, char** argv){
     std::vector<float   > *genEta       = 0;
     std::vector<float   > *genPhi       = 0;
 
-    lRecTree->SetBranchAddress("HGCRecHitEnergy" ,&rechitEnergy);
-    lRecTree->SetBranchAddress("HGCRecHitEta"    ,&rechitEta);
-    lRecTree->SetBranchAddress("HGCRecHitPhi"    ,&rechitPhi);
-    lRecTree->SetBranchAddress("HGCRecHitPosx"   ,&rechitPosx);
-    lRecTree->SetBranchAddress("HGCRecHitPosy"   ,&rechitPosy);
-    lRecTree->SetBranchAddress("HGCRecHitPosz"   ,&rechitPosz);
-    lRecTree->SetBranchAddress("HGCRecHitLayer"  ,&rechitLayer);
-    lRecTree->SetBranchAddress("HGCRecHitIndex"  ,&rechitIndex);
-    lRecTree->SetBranchAddress("HGCRecHitWaferU" ,&rechitWaferU);
-    lRecTree->SetBranchAddress("HGCRecHitWaferV" ,&rechitWaferV);
-    lRecTree->SetBranchAddress("HGCRecHitCellU"  ,&rechitCellU);
-    lRecTree->SetBranchAddress("HGCRecHitCellV"  ,&rechitCellV);
-    lRecTree->SetBranchAddress("GenParEta"       ,&genEta);
-    lRecTree->SetBranchAddress("GenParPhi"       ,&genPhi);
+    lRecTree->SetBranchAddress("rechit_energy" ,&rechitEnergy);
+    lRecTree->SetBranchAddress("rechit_eta"    ,&rechitEta);
+    lRecTree->SetBranchAddress("rechit_phi"    ,&rechitPhi);
+    lRecTree->SetBranchAddress("rechit_x"   ,&rechitPosx);
+    lRecTree->SetBranchAddress("rechit_y"   ,&rechitPosy);
+    lRecTree->SetBranchAddress("rechit_z"   ,&rechitPosz);
+    lRecTree->SetBranchAddress("rechit_layer"  ,&rechitLayer);
+    lRecTree->SetBranchAddress("rechit_wafer_u" ,&rechitWaferU);
+    lRecTree->SetBranchAddress("rechit_wafer_v" ,&rechitWaferV);
+    lRecTree->SetBranchAddress("rechit_cell_u"  ,&rechitCellU);
+    lRecTree->SetBranchAddress("rechit_cell_v"  ,&rechitCellV);
+    lRecTree->SetBranchAddress("gen_eta"       ,&genEta);
+    lRecTree->SetBranchAddress("gen_phi"       ,&genPhi);
 
     unsigned ievtRec = 0;
 
     // Loop over entries (events)
     for (unsigned ievt(0); ievt<nEvts; ++ievt){
+        // Flush MLvectorev contents while keeping the list of dead cells intact
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
             for(unsigned k(5); k < 30; ++k) (*itr)[k] = 0;
         }
@@ -543,31 +542,28 @@ int main(int argc, char** argv){
 
         if (local_entry < 0) continue;
         if (local_entry == 0) {
-            lRecTree->SetBranchAddress("HGCRecHitEnergy" ,&rechitEnergy);
-            lRecTree->SetBranchAddress("HGCRecHitEta"    ,&rechitEta);
-            lRecTree->SetBranchAddress("HGCRecHitPhi"    ,&rechitPhi);
-            lRecTree->SetBranchAddress("HGCRecHitPosx"   ,&rechitPosx);
-            lRecTree->SetBranchAddress("HGCRecHitPosy"   ,&rechitPosy);
-            lRecTree->SetBranchAddress("HGCRecHitPosz"   ,&rechitPosz);
-            lRecTree->SetBranchAddress("HGCRecHitLayer"  ,&rechitLayer);
-            lRecTree->SetBranchAddress("HGCRecHitIndex"  ,&rechitIndex);
-            lRecTree->SetBranchAddress("HGCRecHitWaferU" ,&rechitWaferU);
-            lRecTree->SetBranchAddress("HGCRecHitWaferV" ,&rechitWaferV);
-            lRecTree->SetBranchAddress("HGCRecHitCellU"  ,&rechitCellU);
-            lRecTree->SetBranchAddress("HGCRecHitCellV"  ,&rechitCellV);
-            lRecTree->SetBranchAddress("GenParEta"       ,&genEta);
-            lRecTree->SetBranchAddress("GenParPhi"       ,&genPhi);
+            lRecTree->SetBranchAddress("rechit_energy" ,&rechitEnergy);
+            lRecTree->SetBranchAddress("rechit_eta"    ,&rechitEta);
+            lRecTree->SetBranchAddress("rechit_phi"    ,&rechitPhi);
+            lRecTree->SetBranchAddress("rechit_x"   ,&rechitPosx);
+            lRecTree->SetBranchAddress("rechit_y"   ,&rechitPosy);
+            lRecTree->SetBranchAddress("rechit_z"   ,&rechitPosz);
+            lRecTree->SetBranchAddress("rechit_layer"  ,&rechitLayer);
+            lRecTree->SetBranchAddress("rechit_wafer_u" ,&rechitWaferU);
+            lRecTree->SetBranchAddress("rechit_wafer_v" ,&rechitWaferV);
+            lRecTree->SetBranchAddress("rechit_cell_u"  ,&rechitCellU);
+            lRecTree->SetBranchAddress("rechit_cell_v"  ,&rechitCellV);
+            lRecTree->SetBranchAddress("gen_eta"       ,&genEta);
+            lRecTree->SetBranchAddress("gen_phi"       ,&genPhi);
         }
 
         lRecTree->GetEntry(ievtRec);
 
         double etagen   = 99999.;
         double phigen   = 99999.;
-        //double thetagen = -1.;
         if((*genEta).size()>0) {
             etagen   = (*genEta)[0];
             phigen   = (*genPhi)[0];
-            //thetagen = 2*TMath::ATan(exp(-etagen));
         }
 
         if (debug) std::cout << " - Event contains " << (*rechitEnergy).size()
@@ -580,30 +576,23 @@ int main(int argc, char** argv){
         // Loop over hits of event
         for (unsigned iH(0); iH<(*rechitEnergy).size(); ++iH){
             int layer   = (*rechitLayer)[iH];
-            //double   xh      = (*rechitPosx)[iH];
-            //double   yh      = (*rechitPosy)[iH];
             double   zh      = (*rechitPosz)[iH];
             double   lenergy = (*rechitEnergy)[iH];
             double   leta    = (*rechitEta)[iH];
             double   lphi    = (*rechitPhi)[iH];
             double   dR      = DeltaR(etagen,phigen,leta,lphi);
-            //double   rgen    = zh*tan(thetagen);
-            //double   xgen    = rgen*cos(phigen);
-            //double   ygen    = rgen*sin(phigen);
-            //double   dR1     = fabs(sqrt((xgen-xh)*(xgen-xh)+(ygen-yh)*(ygen-yh)));
 
             int waferU  = (*rechitWaferU)[iH];
             int waferV  = (*rechitWaferV)[iH];
             int cellU   = (*rechitCellU)[iH];
             int cellV   = (*rechitCellV)[iH];
-            int index   = (*rechitIndex)[iH];
 
             /* Select hits that are:
             **     - in CE-E
             **     - within DeltaR < 0.3 wrt gen particle
             **     - in positive endcap
             */
-            if(!index && zh > 0 && dR < coneSize) {
+            if(layer<28 && zh > 0 && dR < coneSize) {
                 rechitsum += lenergy;
                 std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
                 std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistsi.find(tempsi);
@@ -632,8 +621,8 @@ int main(int argc, char** argv){
                     }
                 }
 
-                /* Perform Simple Average
-                ** First, check if the cell is in a neighbors list
+                /* Get rechits for adjacent cells in neighboring layers.
+                ** If cells are also dead then assign a rechit value of -100
                 */
                 std::tuple<int, int, int, int, int, int> tempsiU(
                     1,layer,waferU,waferV,cellU,cellV
@@ -643,7 +632,6 @@ int main(int argc, char** argv){
                 );
                 std::set<std::tuple<int, int, int, int, int, int>>::iterator itrU=adj_to_dead.find(tempsiU);
                 std::set<std::tuple<int, int, int, int, int, int>>::iterator itrD=adj_to_dead.find(tempsiD);
-
                 if(itrU!=adj_to_dead.end()) {
                     rechitsumlaypn += lenergy/2;
                     for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
@@ -669,7 +657,9 @@ int main(int argc, char** argv){
                     }
                 }
 
-                // Get rechits of dead cells' neighbors
+                /* Get rechits of same layer neighbors for the dead cell
+                ** and its adjacent cell neighbors.
+                */
                 for(int n = 0; n < 6; ++n){
                     // Same layer neighbors
                     std::tuple<int, int, int, int, int, int> tempsiNn(
