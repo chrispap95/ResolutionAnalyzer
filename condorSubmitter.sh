@@ -9,9 +9,9 @@ universe = vanilla
 Executable = condor-exec.csh
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
-Transfer_Input_Files = condor-exec.csh, CMSSW_10_6_3_patch1.tgz
 EOF
-echo "Arguments = simpleBH_E${i}Eta1p7_df${df}.cfg out_E${i}Eta1p7_df${df}.root" >> condor_E${i}Eta1p7_df${df}.jdl
+echo "Transfer_Input_Files = condor-exec.csh, ${CMSSW_VERSION}.tgz" >> condor_E${i}Eta1p7_df${df}.jdl
+echo "Arguments = simpleBH_E${i}Eta1p7_df${df}.cfg out_E${i}Eta1p7_df${df}.root ${CMSSW_VERSION}" >> condor_E${i}Eta1p7_df${df}.jdl
 cat >> condor_E${i}Eta1p7_df${df}.jdl << "EOF"
 Output = simpleBH_$(Cluster)_$(Process).stdout
 Error = simpleBH_$(Cluster)_$(Process).stderr

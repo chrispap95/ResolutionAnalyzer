@@ -1,16 +1,28 @@
 #!/usr/bin/sh
 
+# Basic configuration values - self explanatory
+
+eta=1p7
+pGenerator=SingleGamma
+cmssw=CMSSW_10_6_3_patch1
+geometry=upgrade2023_D41
+
+# Loop over dead fractions and energies
+# nRuns: number of files to process
+
 for df in 01 03 05 07
 do
-for i in 2000 2800
+for En in 10 20 50 100
 do
-echo "outFilePath = out_E${i}Eta1p7_df${df}.root" > simpleBH_E${i}Eta1p7_df${df}.cfg
-echo "filePath = root://cmseos.fnal.gov//store/user/chpapage/SingleGamma_E${i}Eta1p7/SingleGamma_E${i}Eta1p7_CMSSW_10_6_3_patch1_upgrade2023_D41_ntuples/"`ls /eos/uscms/store/user/\
-chpapage/SingleGamma_E${i}Eta1p7/SingleGamma_E${i}Eta1p7_CMSSW_10_6_3_patch1_upgrade2023_D41_ntuples/`"/0000" >> simpleBH_E${i}Eta1p7_df${df}.cfg
-cat >> simpleBH_E${i}Eta1p7_df${df}.cfg << "EOF"
+namestring=E${i}Eta${eta}_df${df}
+configuration=${pGenerator}_E${i}Eta${eta}
+samplesPath=store/user/${USER}/${configuration}/${configuration}_${cmssw}_${geometry}_ntuples/
+echo "outFilePath = out_${namestring}.root" > simpleBH_${namestring}.cfg
+echo "filePath = root://cmseos.fnal.gov//${samplesPath}"`ls /eos/uscms/${samplesPath}`"/0000" >> simpleBH_${namestring}.cfg
+cat >> simpleBH_${namestring}.cfg << "EOF"
 recoFileName = ntuples
 nRuns = 200
 EOF
-echo "deadfrac = 0.${df}" >> simpleBH_E${i}Eta1p7_df${df}.cfg
+echo "deadfrac = 0.${df}" >> simpleBH_${namestring}.cfg
 done
 done
