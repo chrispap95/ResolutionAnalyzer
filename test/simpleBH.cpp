@@ -228,7 +228,7 @@ int main(int argc, char** argv){
 
     TChain *lRecTree = 0;
 
-    lRecTree = new TChain("hgcalTupleTree/tree");
+    lRecTree = new TChain("ana/hgc");
 
     if (nRuns == 0){
         lRecTree->AddFile(inputrec.str().c_str());
