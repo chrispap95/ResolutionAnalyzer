@@ -46,6 +46,9 @@ docker_stderror
 # ROOT files
 *.root
 
+# MacOS files
+*.icloud
+
 # Condor and Project related files
 *.jdl
 *.cfg
