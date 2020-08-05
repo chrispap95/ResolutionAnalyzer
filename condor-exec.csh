@@ -15,11 +15,14 @@ make
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:lib:/cvmfs/cms.cern.ch/slc7_amd64_gcc700/external/boost/1.67.0/lib/
 #echo "Arguments passed to this script are: for 1: $1, and for 2: $2"
 ./bin/simpleBH -c scripts/$1
-if [[ $1 == *"to"* ]]; then
+
+# Export file
+set nonomatch
+if ( $1 =~ *"to"* ) then
 xrdcp -f $2 root://cmseos.fnal.gov//store/user/${4}/DeadCellsSamples_correct/TrainingSamples/$2
 else
 xrdcp -f $2 root://cmseos.fnal.gov//store/user/${4}/DeadCellsSamples_correct/EvaluationSamples/$2
-fi
+endif
 ### remove the output file if you don't want it automatically transferred when the job ends
 rm $2
 cd ${_CONDOR_SCRATCH_DIR}
