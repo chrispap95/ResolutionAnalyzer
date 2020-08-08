@@ -2,10 +2,12 @@
 source prepareCondor.sh
 
 eta=1p7
+deadFractions=(01 03 05 07)
+energies=(5 10 20 40 60 80 100)
 
-for df in 01 03 05 07
+for df in ${deadFractions[@]}
 do
-for En in 5 10 15 20 30 40 60 80 100 140 200 280 400 550 750 1000 1400
+for En in ${energies[@]}
 do
 namestring=E${En}Eta${eta}_df${df}
 argument=simpleBH_${namestring}.cfg\ out_${namestring}.root\ ${CMSSW_VERSION}\ ${USER}

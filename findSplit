@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+
+# Input section
+# filesNumber: in how many files is your flat generation split
+# deadFractions: list of dead cell fractions
+filesNumber = 500
+deadFractions = [1,3,5,7]
+
+factor = 0
+for fr in deadFractions:
+    factor+=1/fr
+n1 = filesNumber/factor
+
+print('You should process:')
+for fr in deadFractions:
+    print('\n'+str(round(n1/fr))+'\tfiles with '+str(fr)+'%')
