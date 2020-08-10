@@ -21,7 +21,7 @@ for df in ${deadFractions[@]}
 do
 namestring=E${energyRange}Eta${eta}_df${df}
 samplesPath=store/user/${USER}/${configuration}/${configuration}_${cmssw}_${geometry}_ntuples/
-echo "outFilePath = out_${namestring}_${i}.root" > simpleBH_${namestring}.cfg
+echo "outFilePath = out_${namestring}.root" > simpleBH_${namestring}.cfg
 echo "filePath = ${siteUrl}/${samplesPath}"`ls /eos/uscms/${samplesPath}`"/0000" >> simpleBH_${namestring}.cfg
 echo "recoFileName = ntuples" >> simpleBH_${namestring}.cfg
 echo "nRuns = ${filesToProcess[$i]}" >> simpleBH_${namestring}.cfg
