@@ -9,5 +9,5 @@ cd $USERBASE
 if [ ! -f ${CMSSW_VERSION}.tgz ]; then
 echo "Error: tarball doesn't exist!"
 else
-echo -n " Done!"
-fi 
+echo " Done!"
+fi

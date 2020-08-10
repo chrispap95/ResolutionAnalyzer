@@ -1,5 +1,5 @@
 #!/usr/bin/sh
-source prepareCondor.sh
+source ${PWD}/prepareCondor.sh
 
 # Define submission parameters
 #   - samplesNumber is the number of files to process per dead fraction
