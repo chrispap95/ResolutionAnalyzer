@@ -19,9 +19,9 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:lib:/cvmfs/cms.cern.ch/slc7_amd64_gcc7
 # Export file
 set nonomatch
 if ( $1 =~ *"to"* ) then
-xrdcp -f $2 root://cmseos.fnal.gov//store/user/${4}/DeadCellsSamples_correct/TrainingSamples/$2
+xrdcp -f $2 root://cmseos.fnal.gov//store/user/${4}/DeadCellsSamples/TrainingSamples/$2
 else
-xrdcp -f $2 root://cmseos.fnal.gov//store/user/${4}/DeadCellsSamples_correct/EvaluationSamples/$2
+xrdcp -f $2 root://cmseos.fnal.gov//store/user/${4}/DeadCellsSamples/EvaluationSamples/$2
 endif
 ### remove the output file if you don't want it automatically transferred when the job ends
 rm $2

@@ -27,6 +27,6 @@ echo "recoFileName = ntuples" >> simpleBH_${namestring}.cfg
 echo "nRuns = ${filesToProcess[$i]}" >> simpleBH_${namestring}.cfg
 echo "deadfrac = 0.${df}" >> simpleBH_${namestring}.cfg
 echo "firstRun = ${firstFile}" >> simpleBH_${namestring}.cfg
-firstFile=$(($firstFile + $filesToProcess[$i]))
+firstFile=$(($firstFile + ${filesToProcess[$i]}))
 ((i+=1))
 done
