@@ -4,7 +4,7 @@
 
 eta=1p7
 pGenerator=SingleGamma
-cmssw=CMSSW_10_6_3_patch1
+cmssw=${CMSSW_VERSION}
 geometry=upgrade2023_D41
 siteUrl=root://cmseos.fnal.gov/
 deadFractions=(01 03 05 07)

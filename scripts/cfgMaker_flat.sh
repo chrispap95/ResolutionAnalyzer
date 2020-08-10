@@ -5,7 +5,7 @@
 energyRange=0to3000
 eta=1p7
 pGenerator=SingleGamma
-cmssw=CMSSW_10_6_3_patch1
+cmssw=${CMSSW_VERSION}
 geometry=upgrade2023_D41
 siteUrl=root://cmseos.fnal.gov/
 deadFractions=(01 03 05 07)
@@ -21,12 +21,12 @@ for df in ${deadFractions[@]}
 do
 namestring=E${energyRange}Eta${eta}_df${df}
 samplesPath=store/user/${USER}/${configuration}/${configuration}_${cmssw}_${geometry}_ntuples/
-echo "outFilePath = out_${namestring}_${i}.root" > simpleBH_${namestring}_${i}.cfg
+echo "outFilePath = out_${namestring}_${i}.root" > simpleBH_${namestring}.cfg
 echo "filePath = ${siteUrl}/${samplesPath}"`ls /eos/uscms/${samplesPath}`"/0000" >> simpleBH_${namestring}.cfg
 echo "recoFileName = ntuples" >> simpleBH_${namestring}.cfg
 echo "nRuns = ${filesToProcess[$i]}" >> simpleBH_${namestring}.cfg
 echo "deadfrac = 0.${df}" >> simpleBH_${namestring}.cfg
-echo "firstRun = ${firstFile}" >> simpleBH_${namestring}_${i}.cfg
+echo "firstRun = ${firstFile}" >> simpleBH_${namestring}.cfg
 firstFile=$(($firstFile + $filesToProcess[$i]))
 ((i+=1))
 done
