@@ -12,6 +12,8 @@ deadFractions=(01 03 05 07)
 for df in ${deadFractions[@]}
 do
 namestring=E${energyRange}Eta${eta}_df${df}
+argument=simpleBH_${namestring}.cfg\ out_${namestring}.root\ ${CMSSW_VERSION}\ ${USER}
+
 cat > condor_${namestring}.jdl << "EOF"
 universe = vanilla
 Executable = condor-exec.csh
@@ -19,7 +21,7 @@ Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
 EOF
 echo "Transfer_Input_Files = condor-exec.csh, ${CMSSW_VERSION}.tgz" >> condor_${namestring}.jdl
-echo "Arguments = simpleBH_${namestring}.cfg out_${namestring}.root" >> condor_${namestring}.jdl
+echo "Arguments = ${argument}" >> condor_${namestring}.jdl
 cat >> condor_${namestring}.jdl << "EOF"
 Output = simpleBH_$(Cluster)_$(Process).stdout
 Error = simpleBH_$(Cluster)_$(Process).stderr
