@@ -228,7 +228,7 @@ int main(int argc, char** argv){
 
     TChain *lRecTree = 0;
 
-    lRecTree = new TChain("ana/hgc");
+    lRecTree = new TChain("hgcalTupleTree/tree");
 
     if (nRuns == 0){
         lRecTree->AddFile(inputrec.str().c_str());
@@ -505,6 +505,7 @@ int main(int argc, char** argv){
     std::vector<float   > *rechitPosy   = 0;
     std::vector<float   > *rechitPosz   = 0;
     std::vector<int     > *rechitLayer  = 0;
+    std::vector<int     > *rechitIndex  = 0;
     std::vector<int     > *rechitWaferU = 0;
     std::vector<int     > *rechitWaferV = 0;
     std::vector<int     > *rechitCellU  = 0;
@@ -512,19 +513,20 @@ int main(int argc, char** argv){
     std::vector<float   > *genEta       = 0;
     std::vector<float   > *genPhi       = 0;
 
-    lRecTree->SetBranchAddress("rechit_energy" ,&rechitEnergy);
-    lRecTree->SetBranchAddress("rechit_eta"    ,&rechitEta);
-    lRecTree->SetBranchAddress("rechit_phi"    ,&rechitPhi);
-    lRecTree->SetBranchAddress("rechit_x"   ,&rechitPosx);
-    lRecTree->SetBranchAddress("rechit_y"   ,&rechitPosy);
-    lRecTree->SetBranchAddress("rechit_z"   ,&rechitPosz);
-    lRecTree->SetBranchAddress("rechit_layer"  ,&rechitLayer);
-    lRecTree->SetBranchAddress("rechit_wafer_u" ,&rechitWaferU);
-    lRecTree->SetBranchAddress("rechit_wafer_v" ,&rechitWaferV);
-    lRecTree->SetBranchAddress("rechit_cell_u"  ,&rechitCellU);
-    lRecTree->SetBranchAddress("rechit_cell_v"  ,&rechitCellV);
-    lRecTree->SetBranchAddress("gen_eta"       ,&genEta);
-    lRecTree->SetBranchAddress("gen_phi"       ,&genPhi);
+    lRecTree->SetBranchAddress("HGCRecHitEnergy" ,&rechitEnergy);
+    lRecTree->SetBranchAddress("HGCRecHitEta"    ,&rechitEta);
+    lRecTree->SetBranchAddress("HGCRecHitPhi"    ,&rechitPhi);
+    lRecTree->SetBranchAddress("HGCRecHitPosx"   ,&rechitPosx);
+    lRecTree->SetBranchAddress("HGCRecHitPosy"   ,&rechitPosy);
+    lRecTree->SetBranchAddress("HGCRecHitPosz"   ,&rechitPosz);
+    lRecTree->SetBranchAddress("HGCRecHitLayer"  ,&rechitLayer);
+    lRecTree->SetBranchAddress("HGCRecHitIndex"  ,&rechitIndex);
+    lRecTree->SetBranchAddress("HGCRecHitWaferU" ,&rechitWaferU);
+    lRecTree->SetBranchAddress("HGCRecHitWaferV" ,&rechitWaferV);
+    lRecTree->SetBranchAddress("HGCRecHitCellU"  ,&rechitCellU);
+    lRecTree->SetBranchAddress("HGCRecHitCellV"  ,&rechitCellV);
+    lRecTree->SetBranchAddress("GenParEta"       ,&genEta);
+    lRecTree->SetBranchAddress("GenParPhi"       ,&genPhi);
 
     unsigned ievtRec = 0;
 
@@ -542,19 +544,20 @@ int main(int argc, char** argv){
 
         if (local_entry < 0) continue;
         if (local_entry == 0) {
-            lRecTree->SetBranchAddress("rechit_energy" ,&rechitEnergy);
-            lRecTree->SetBranchAddress("rechit_eta"    ,&rechitEta);
-            lRecTree->SetBranchAddress("rechit_phi"    ,&rechitPhi);
-            lRecTree->SetBranchAddress("rechit_x"   ,&rechitPosx);
-            lRecTree->SetBranchAddress("rechit_y"   ,&rechitPosy);
-            lRecTree->SetBranchAddress("rechit_z"   ,&rechitPosz);
-            lRecTree->SetBranchAddress("rechit_layer"  ,&rechitLayer);
-            lRecTree->SetBranchAddress("rechit_wafer_u" ,&rechitWaferU);
-            lRecTree->SetBranchAddress("rechit_wafer_v" ,&rechitWaferV);
-            lRecTree->SetBranchAddress("rechit_cell_u"  ,&rechitCellU);
-            lRecTree->SetBranchAddress("rechit_cell_v"  ,&rechitCellV);
-            lRecTree->SetBranchAddress("gen_eta"       ,&genEta);
-            lRecTree->SetBranchAddress("gen_phi"       ,&genPhi);
+            lRecTree->SetBranchAddress("HGCRecHitEnergy" ,&rechitEnergy);
+            lRecTree->SetBranchAddress("HGCRecHitEta"    ,&rechitEta);
+            lRecTree->SetBranchAddress("HGCRecHitPhi"    ,&rechitPhi);
+            lRecTree->SetBranchAddress("HGCRecHitParx"   ,&rechitPosx);
+            lRecTree->SetBranchAddress("HGCRecHitPary"   ,&rechitPosy);
+            lRecTree->SetBranchAddress("HGCRecHitParz"   ,&rechitPosz);
+            lRecTree->SetBranchAddress("HGCRecHitLayer"  ,&rechitLayer);
+            lRecTree->SetBranchAddress("HGCRecHitIndex"  ,&rechitIndex);
+            lRecTree->SetBranchAddress("HGCRecHitWaferU" ,&rechitWaferU);
+            lRecTree->SetBranchAddress("HGCRecHitWaferV" ,&rechitWaferV);
+            lRecTree->SetBranchAddress("HGCRecHitCellU"  ,&rechitCellU);
+            lRecTree->SetBranchAddress("HGCRecHitCellV"  ,&rechitCellV);
+            lRecTree->SetBranchAddress("GenParEta"       ,&genEta);
+            lRecTree->SetBranchAddress("GenParPhi"       ,&genPhi);
         }
 
         lRecTree->GetEntry(ievtRec);
@@ -586,13 +589,14 @@ int main(int argc, char** argv){
             int waferV  = (*rechitWaferV)[iH];
             int cellU   = (*rechitCellU)[iH];
             int cellV   = (*rechitCellV)[iH];
+            int index   = (*rechitIndex)[iH];
 
             /* Select hits that are:
             **     - in CE-E
             **     - within DeltaR < 0.3 wrt gen particle
             **     - in positive endcap
             */
-            if(layer<28 && zh > 0 && dR < coneSize) {
+            if(!index && zh > 0 && dR < coneSize) {
                 rechitsum += lenergy;
                 std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
                 std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistsi.find(tempsi);
