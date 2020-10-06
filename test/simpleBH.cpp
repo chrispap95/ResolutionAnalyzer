@@ -547,9 +547,9 @@ int main(int argc, char** argv){
             lRecTree->SetBranchAddress("HGCRecHitEnergy" ,&rechitEnergy);
             lRecTree->SetBranchAddress("HGCRecHitEta"    ,&rechitEta);
             lRecTree->SetBranchAddress("HGCRecHitPhi"    ,&rechitPhi);
-            lRecTree->SetBranchAddress("HGCRecHitParx"   ,&rechitPosx);
-            lRecTree->SetBranchAddress("HGCRecHitPary"   ,&rechitPosy);
-            lRecTree->SetBranchAddress("HGCRecHitParz"   ,&rechitPosz);
+            lRecTree->SetBranchAddress("HGCRecHitPosx"   ,&rechitPosx);
+            lRecTree->SetBranchAddress("HGCRecHitPosy"   ,&rechitPosy);
+            lRecTree->SetBranchAddress("HGCRecHitPosz"   ,&rechitPosz);
             lRecTree->SetBranchAddress("HGCRecHitLayer"  ,&rechitLayer);
             lRecTree->SetBranchAddress("HGCRecHitIndex"  ,&rechitIndex);
             lRecTree->SetBranchAddress("HGCRecHitWaferU" ,&rechitWaferU);
