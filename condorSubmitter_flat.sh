@@ -8,10 +8,32 @@ source ${PWD}/prepareCondor.sh
 energyRange=0to3000
 eta=1p7
 deadFractions=(01 03 05 07)
+numberOfJobs=(15 5 3 3)
 
+# Checks if any dead fraction has been split
+function isSplit() {
+  for i in $@
+  do
+    if [ $i -ne 1 ]
+    then
+      echo 1
+      exit
+    fi
+  done
+  echo 0
+}
+
+i=0
 for df in ${deadFractions[@]}
 do
-namestring=E${energyRange}Eta${eta}_df${df}
+for j in `seq ${numberOfJobs[${i}]}`
+do
+if [ $(isSplit "${numberOfJobs[@]}") -eq 1 ]
+then
+  namestring=E${energyRange}Eta${eta}_df${df}_${j}
+else
+  namestring=E${energyRange}Eta${eta}_df${df}
+fi
 argument=simpleBH_${namestring}.cfg\ out_${namestring}.root\ ${CMSSW_VERSION}\ ${USER}
 
 cat > condor_${namestring}.jdl << "EOF"
@@ -30,4 +52,6 @@ x509userproxy = $ENV(X509_USER_PROXY)
 Queue 1
 EOF
 condor_submit condor_${namestring}.jdl
+done
+((i+=1))
 done
