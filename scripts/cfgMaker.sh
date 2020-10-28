@@ -16,15 +16,15 @@ filesToProcess=200
 
 for df in ${deadFractions[@]}
 do
-for En in ${energies[@]}
-do
-namestring=E${En}Eta${eta}_df${df}
-configuration=${pGenerator}_E${En}Eta${eta}
-samplesPath=store/user/${USER}/${configuration}/${configuration}_${cmssw}_${geometry}_ntuples/
-echo "outFilePath = out_${namestring}.root" > simpleBH_${namestring}.cfg
-echo "filePath = ${siteUrl}/${samplesPath}"`ls /eos/uscms/${samplesPath}`"/0000" >> simpleBH_${namestring}.cfg
-echo "recoFileName = ntuples" >> simpleBH_${namestring}.cfg
-echo "nRuns = ${filesToProcess}" >> simpleBH_${namestring}.cfg
-echo "deadfrac = 0.${df}" >> simpleBH_${namestring}.cfg
-done
+  for En in ${energies[@]}
+  do
+    namestring=E${En}Eta${eta}_df${df}
+    configuration=${pGenerator}_E${En}Eta${eta}
+    samplesPath=store/user/${USER}/${configuration}/${configuration}_${cmssw}_${geometry}_ntuples/
+    echo "outFilePath = out_${namestring}.root" > simpleBH_${namestring}.cfg
+    echo "filePath = ${siteUrl}/${samplesPath}"`ls /eos/uscms/${samplesPath}`"/0000" >> simpleBH_${namestring}.cfg
+    echo "recoFileName = ntuples" >> simpleBH_${namestring}.cfg
+    echo "nRuns = ${filesToProcess}" >> simpleBH_${namestring}.cfg
+    echo "deadfrac = 0.${df}" >> simpleBH_${namestring}.cfg
+  done
 done

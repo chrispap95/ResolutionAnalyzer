@@ -1,5 +1,5 @@
 #!/usr/bin/sh
-source prepareCondor.sh
+source ${PWD}/prepareCondor.sh
 
 eta=1p7
 deadFractions=(01 03 05 07)
