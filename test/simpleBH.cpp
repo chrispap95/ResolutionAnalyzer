@@ -58,10 +58,16 @@ double DeltaR(double eta1,double phi1,double eta2,double phi2){
 
 /* Function that gives a vector of tuples that describe the neighbors
 ** of the tuple that is given as the input.
+**     - offset: is 0 for low density areas and 4 for high density areas
+**     Warning: This cutoff based method is not accurate.
+**              The regions' borders start between 2.07 and 2.085 and can end
+**              up to at eta 2.3.
 */
 std::vector<std::tuple<int, int, int, int, int>> getNeighbors(
-    std::tuple<int, int, int, int, int> deadCell)
+    std::tuple<int, int, int, int, int> deadCell, bool isDense)
 {
+    int offset = 0;
+    if (isDense) offset = 4;
     std::vector<std::tuple<int, int, int, int, int>> neighbors;
     // Find same-layer neighboring cells
     // cell ( 0,-1) wrt given
@@ -87,68 +93,68 @@ std::vector<std::tuple<int, int, int, int, int>> getNeighbors(
 
     // Check boundary conditions and make transitions between wafers when on the edge
     // For n1
-    if (std::get<3>(n1) > -1 && std::get<3>(n1) < 8 && std::get<4>(n1) == -1){
+    if (std::get<3>(n1) > -1 && std::get<3>(n1) < (8 + offset) && std::get<4>(n1) == -1){
         std::get<1>(n1) += 1;
-        std::get<3>(n1) += 8;
-        std::get<4>(n1) = 15;
-    }else if (std::get<3>(n1)-std::get<4>(n1) == 9){
+        std::get<3>(n1) += 8 + offset;
+        std::get<4>(n1) = 15 + 2*offset;
+    }else if (std::get<3>(n1)-std::get<4>(n1) == 9 + offset){
         std::get<1>(n1) += 1;
         std::get<2>(n1) += 1;
-        std::get<3>(n1) -= 8;
-        std::get<4>(n1) += 8;
+        std::get<3>(n1) -= 8 + offset;
+        std::get<4>(n1) += 8 + offset;
     }
     // For n2
-    if (std::get<3>(n2) > -1 && std::get<3>(n2) < 8 && std::get<4>(n2) == -1){
+    if (std::get<3>(n2) > -1 && std::get<3>(n2) < (8 + offset) && std::get<4>(n2) == -1){
         std::get<1>(n2) += 1;
-        std::get<3>(n2) += 8;
-        std::get<4>(n2) = 15;
-    }else if (std::get<4>(n2) > -1 && std::get<4>(n2) < 8 && std::get<3>(n2) == -1){
+        std::get<3>(n2) += 8 + offset;
+        std::get<4>(n2) = 15 + 2*offset;
+    }else if (std::get<4>(n2) > -1 && std::get<4>(n2) < (8 + offset) && std::get<3>(n2) == -1){
         std::get<2>(n2) -= 1;
-        std::get<3>(n2) = 15;
-        std::get<4>(n2) += 8;
+        std::get<3>(n2) = 15 + 2*offset;
+        std::get<4>(n2) += 8 + offset;
     }
     // For n3
-    if (std::get<4>(n3) > -1 && std::get<4>(n3) < 8 && std::get<3>(n3) == -1){
+    if (std::get<4>(n3) > -1 && std::get<4>(n3) < (8 + offset) && std::get<3>(n3) == -1){
         std::get<2>(n3) -= 1;
-        std::get<3>(n3) = 15;
-        std::get<4>(n3) += 8;
-    }else if (std::get<4>(n3)-std::get<3>(n3) == 8){
+        std::get<3>(n3) = 15 + 2*offset;
+        std::get<4>(n3) += 8 + offset;
+    }else if (std::get<4>(n3)-std::get<3>(n3) == 8 + offset){
         std::get<1>(n3) -= 1;
         std::get<2>(n3) -= 1;
-        std::get<3>(n3) += 8;
-        std::get<4>(n3) -= 8;
+        std::get<3>(n3) += 8 + offset;
+        std::get<4>(n3) -= 8 + offset;
     }
     // For n4
-    if (std::get<3>(n4) > 7 && std::get<3>(n4) < 16 && std::get<4>(n4) == 16){
+    if (std::get<3>(n4) > (7 + offset) && std::get<3>(n4) < (16 + 2*offset) && std::get<4>(n4) == (16 + 2*offset)){
         std::get<1>(n4) -= 1;
-        std::get<3>(n4) -= 8;
+        std::get<3>(n4) -= 8 + offset;
         std::get<4>(n4) = 0;
-    }else if (std::get<4>(n4)-std::get<3>(n4) == 8){
+    }else if (std::get<4>(n4)-std::get<3>(n4) == (8 + offset)){
         std::get<1>(n4) -= 1;
         std::get<2>(n4) -= 1;
-        std::get<3>(n4) += 8;
-        std::get<4>(n4) -= 8;
+        std::get<3>(n4) += 8 + offset;
+        std::get<4>(n4) -= 8 + offset;
     }
     // For n5
-    if (std::get<4>(n5) > 7 && std::get<4>(n5) < 16 && std::get<3>(n5) == 16){
+    if (std::get<4>(n5) > (7 + offset) && std::get<4>(n5) < (16 + 2*offset) && std::get<3>(n5) == (16 + 2*offset)){
         std::get<2>(n5) += 1;
         std::get<3>(n5) = 0;
-        std::get<4>(n5) -= 8;
-    }else if (std::get<3>(n5) > 7 && std::get<3>(n5) < 16 && std::get<4>(n5) == 16){
+        std::get<4>(n5) -= 8 + offset;
+    }else if (std::get<3>(n5) > (7 + offset) && std::get<3>(n5) < (16 + 2*offset) && std::get<4>(n5) == (16 + 2*offset)){
         std::get<1>(n5) -= 1;
-        std::get<3>(n5) -= 8;
+        std::get<3>(n5) -= 8 + offset;
         std::get<4>(n5) = 0;
     }
     // For n6
-    if (std::get<4>(n6) > 7 && std::get<4>(n6) < 16 && std::get<3>(n6) == 16){
+    if (std::get<4>(n6) > (7 + offset) && std::get<4>(n6) < (16 + 2*offset) && std::get<3>(n6) == (16 + 2*offset)){
         std::get<2>(n6) += 1;
         std::get<3>(n6) = 0;
-        std::get<4>(n6) -= 8;
-    }else if (std::get<3>(n6)-std::get<4>(n6) == 9){
+        std::get<4>(n6) -= 8 + offset;
+    }else if (std::get<3>(n6)-std::get<4>(n6) == (9 + offset)){
         std::get<1>(n6) += 1;
         std::get<2>(n6) += 1;
-        std::get<3>(n6) -= 8;
-        std::get<4>(n6) += 8;
+        std::get<3>(n6) -= 8 + offset;
+        std::get<4>(n6) += 8 + offset;
     }
 
     neighbors.push_back(n1);
@@ -176,7 +182,7 @@ int main(int argc, char** argv){
     std::string MLFilePath;
     unsigned debug;
     double deadfrac;
-    bool adjacent, MLsample;
+    bool adjacent, MLsample, denseCells;
     po::options_description preconfig("Configuration");
     preconfig.add_options()("cfg,c",po::value<std::string>(&cfg)->required());
     po::variables_map vm;
@@ -199,7 +205,7 @@ int main(int argc, char** argv){
     ("MLsample",        po::value<bool>(&MLsample)->default_value(1))
     //File to export data for ML **********Attention: Obsolete!
     ("MLFilePath",      po::value<std::string>(&MLFilePath)->default_value("training_sample.root"))
-
+    ("denseCells",        po::value<bool>(&denseCells)->default_value(0))
     ;
     po::store(po::command_line_parser(argc, argv).options(config).allow_unregistered().run(), vm);
     po::store(po::parse_config_file<char>(cfg.c_str(), config), vm);
@@ -351,13 +357,16 @@ int main(int argc, char** argv){
 
     /* Loops over all possible cells and kills them with a probability
     ** given by the dead fraction.
+    ** offset: if dense area then it is 4
     */
     TRandom3 r(0);
-    for(int lr = 1; lr <= 28; ++lr) {
-        for(int waferU = -12; waferU <= 12; ++waferU) {
-            for(int waferV = -12; waferV <= 12; ++waferV) {
-                for(int cellU = 0; cellU <= 16; ++cellU) {
-                    for(int cellV = 0; cellV <=16; ++cellV){
+    int offset = 0;
+    if (denseCells) offset = 4;
+    for(int lr = 1; lr < 29; ++lr) {
+        for(int waferU = -11; waferU < 12; ++waferU) {
+            for(int waferV = -11; waferV < 12; ++waferV) {
+                for(int cellU = 0; cellU < 16+2*offset; ++cellU) {
+                    for(int cellV = 0; cellV < 16+2*offset; ++cellV){
                         N_try_all++;
                         if(r.Rndm() < deadfrac){
                             N_try_success++;
@@ -388,7 +397,7 @@ int main(int argc, char** argv){
                             });
 
                             std::vector<std::tuple<int,int,int,int,int>> inLayerNeighbors;
-                            inLayerNeighbors = getNeighbors(deadCell);
+                            inLayerNeighbors = getNeighbors(deadCell, denseCells);
                             int iN = 0;
                             for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); ++itr){
                                 adj_to_dead_inlay.insert({
@@ -669,7 +678,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
                     if(itrNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
-                        sameLayerNeighbors = getNeighbors(tempsi);
+                        sameLayerNeighbors = getNeighbors(tempsi, denseCells);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
@@ -695,7 +704,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
                     if(itrUNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> nextLayerNeighbors;
-                        nextLayerNeighbors = getNeighbors(tempsi);
+                        nextLayerNeighbors = getNeighbors(tempsi, denseCells);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrUNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
@@ -721,7 +730,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
                     if(itrDNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> prevLayerNeighbors;
-                        prevLayerNeighbors = getNeighbors(tempsi);
+                        prevLayerNeighbors = getNeighbors(tempsi, denseCells);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrDNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
