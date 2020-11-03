@@ -56,7 +56,7 @@ double DeltaR(double eta1,double phi1,double eta2,double phi2){
     return dr;
 }
 
-/* Function that gives a vector of tuples that describe the neighbors
+/* Returns a vector of tuples that describe the neighbors
 ** of the tuple that is given as the input.
 **     - offset: is 0 for low density areas and 4 for high density areas
 **     Warning: This cutoff based method is not accurate.
@@ -167,10 +167,6 @@ std::vector<std::tuple<int, int, int, int, int>> getNeighbors(
 }
 
 int main(int argc, char** argv){
-    /**********************************
-    ** initialize some variables
-    **********************************/
-
     //Input output and config options
     std::string cfg;
     unsigned pNevts;
@@ -179,10 +175,9 @@ int main(int argc, char** argv){
     std::string digifilePath;
     unsigned nRuns,firstRun;
     std::string recoFileName;
-    std::string MLFilePath;
     unsigned debug;
     double deadfrac;
-    bool adjacent, MLsample, denseCells;
+    bool adjacent;
     po::options_description preconfig("Configuration");
     preconfig.add_options()("cfg,c",po::value<std::string>(&cfg)->required());
     po::variables_map vm;
@@ -201,11 +196,6 @@ int main(int argc, char** argv){
     ("deadfrac",        po::value<double>(&deadfrac)->default_value(0))
     //Restrict number of adjacent dead cells
     ("adjacent",        po::value<bool>(&adjacent)->default_value(0))
-    //Generate ML study training sample
-    ("MLsample",        po::value<bool>(&MLsample)->default_value(1))
-    //File to export data for ML **********Attention: Obsolete!
-    ("MLFilePath",      po::value<std::string>(&MLFilePath)->default_value("training_sample.root"))
-    ("denseCells",        po::value<bool>(&denseCells)->default_value(0))
     ;
     po::store(po::command_line_parser(argc, argv).options(config).allow_unregistered().run(), vm);
     po::store(po::parse_config_file<char>(cfg.c_str(), config), vm);
@@ -288,7 +278,7 @@ int main(int argc, char** argv){
     float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6;
     float MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6;
     float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6;
-    float MLrechitsum;
+    float MLrechitsum, thickness;
     TTree* t1 = new TTree("t1","sample");
     t1->Branch("layer"    ,&MLlayer    ,"layer/F"    );
     t1->Branch("waferU"   ,&MLwaferU   ,"waferU/F"   );
@@ -320,6 +310,7 @@ int main(int argc, char** argv){
     t1->Branch("dn6"      ,&MLdn6      ,"dn6/F"      );
     t1->Branch("event"    ,&MLevent    ,"event/F"    );
     t1->Branch("rechitsum",&MLrechitsum,"rechitsum/F");
+    t1->Branch("thickness",&MLthickness,"thickness/F");
 
     /*
     ** Define a vector of the array:
@@ -332,15 +323,15 @@ int main(int argc, char** argv){
     **      MLun1, MLun2, MLun3, MLun4, MLun5, MLun6,
     **      MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6,
     **      MLevent,
-    **      MLrechitsum
+    **      MLrechitsum,
+    **      MLthickness
     ** }
     */
-    std::vector<std::array<float, 30>> MLvectorev;
+    std::vector<std::array<float, 31>> MLvectorev;
 
     /**********************************
     ** for missing channel study
     **********************************/
-    // SILICON
     std::set<std::tuple<int, int, int, int, int>> deadlistsi;
 
     // Define average energy in layers plus and minus 1
@@ -357,14 +348,23 @@ int main(int argc, char** argv){
 
     /* Loops over all possible cells and kills them with a probability
     ** given by the dead fraction.
-    ** offset: if dense area then it is 4
+    ** offset: if in dense area then it is 4
     */
     TRandom3 r(0);
     int offset = 0;
-    if (denseCells) offset = 4;
+    const float r_denseLimit = 10.1;
     for(int lr = 1; lr < 29; ++lr) {
         for(int waferU = -11; waferU < 12; ++waferU) {
             for(int waferV = -11; waferV < 12; ++waferV) {
+                if(sqrt(pow(-2*waferU+waferV, 2)+pow(2*waferV, 2)) < r_denseLimit) {
+                    if(abs(waferU-waferV) == 1 | abs(waferU-waferV) == 4 | abs(waferU-waferV) == 5 ){
+                        offset = 0;
+                    } else {
+                        offset = 4;
+                    }
+                } else {
+                    offset = 0;
+                }
                 for(int cellU = 0; cellU < 16+2*offset; ++cellU) {
                     for(int cellV = 0; cellV < 16+2*offset; ++cellV){
                         N_try_all++;
@@ -411,8 +411,8 @@ int main(int argc, char** argv){
                                 iN++;
                             }
 
-                            std::array<float, 30> temp_vector;
-                            for(unsigned k(0); k < 30; ++k) temp_vector[k] = 0;
+                            std::array<float, 31> temp_vector;
+                            for(unsigned k(0); k < 31; ++k) temp_vector[k] = 0;
                             temp_vector[0] = (float)lr; //layer
                             temp_vector[1] = (float)waferU; //dead cell's waferU
                             temp_vector[2] = (float)waferV; //dead cell's waferV
@@ -430,8 +430,8 @@ int main(int argc, char** argv){
     ** no available dead rechits.
     */
 
-    std::array<float, 30> buffer_vector;
-    for(unsigned k(0); k < 30; ++k) buffer_vector[k] = -1;
+    std::array<float, 31> buffer_vector;
+    for(unsigned k(0); k < 31; ++k) buffer_vector[k] = -1;
     MLvectorev.push_back(buffer_vector);
 
     std::cout << "List of dead Si cells was created successfully. \n"
@@ -507,20 +507,23 @@ int main(int argc, char** argv){
     << lRecTree->GetEntries() << std::endl;
 
     //loop on events
-    std::vector<float   > *rechitEnergy = 0;
-    std::vector<float   > *rechitEta    = 0;
-    std::vector<float   > *rechitPhi    = 0;
-    std::vector<float   > *rechitPosx   = 0;
-    std::vector<float   > *rechitPosy   = 0;
-    std::vector<float   > *rechitPosz   = 0;
-    std::vector<int     > *rechitLayer  = 0;
-    std::vector<int     > *rechitWaferU = 0;
-    std::vector<int     > *rechitWaferV = 0;
-    std::vector<int     > *rechitCellU  = 0;
-    std::vector<int     > *rechitCellV  = 0;
-    std::vector<float   > *genEta       = 0;
-    std::vector<float   > *genPhi       = 0;
+    int *event = 0;
+    std::vector<float> *rechitEnergy = 0;
+    std::vector<float> *rechitEta = 0;
+    std::vector<float> *rechitPhi = 0;
+    std::vector<float> *rechitPosx = 0;
+    std::vector<float> *rechitPosy = 0;
+    std::vector<float> *rechitPosz = 0;
+    std::vector<int> *rechitLayer = 0;
+    std::vector<int> *rechitWaferU = 0;
+    std::vector<int> *rechitWaferV = 0;
+    std::vector<int> *rechitCellU = 0;
+    std::vector<int> *rechitCellV = 0;
+    std::vector<int> *rechitThickness = 0;
+    std::vector<float> *genEta = 0;
+    std::vector<float> *genPhi = 0;
 
+    lRecTree->SetBranchAddress("event" ,&event);
     lRecTree->SetBranchAddress("rechit_energy" ,&rechitEnergy);
     lRecTree->SetBranchAddress("rechit_eta"    ,&rechitEta);
     lRecTree->SetBranchAddress("rechit_phi"    ,&rechitPhi);
@@ -532,6 +535,7 @@ int main(int argc, char** argv){
     lRecTree->SetBranchAddress("rechit_wafer_v" ,&rechitWaferV);
     lRecTree->SetBranchAddress("rechit_cell_u"  ,&rechitCellU);
     lRecTree->SetBranchAddress("rechit_cell_v"  ,&rechitCellV);
+    lRecTree->SetBranchAddress("rechit_thickness" ,&rechitThickness);
     lRecTree->SetBranchAddress("gen_eta"       ,&genEta);
     lRecTree->SetBranchAddress("gen_phi"       ,&genPhi);
 
@@ -541,7 +545,7 @@ int main(int argc, char** argv){
     for (unsigned ievt(0); ievt<nEvts; ++ievt){
         // Flush MLvectorev contents while keeping the list of dead cells intact
         for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
-            for(unsigned k(5); k < 30; ++k) (*itr)[k] = 0;
+            for(unsigned k(5); k < 31; ++k) (*itr)[k] = 0;
         }
         if (ievtRec>=lRecTree->GetEntries()) continue;
         Long64_t local_entry = lRecTree->LoadTree(ievt);
@@ -551,6 +555,7 @@ int main(int argc, char** argv){
 
         if (local_entry < 0) continue;
         if (local_entry == 0) {
+            lRecTree->SetBranchAddress("event" ,&event);
             lRecTree->SetBranchAddress("rechit_energy" ,&rechitEnergy);
             lRecTree->SetBranchAddress("rechit_eta"    ,&rechitEta);
             lRecTree->SetBranchAddress("rechit_phi"    ,&rechitPhi);
@@ -562,6 +567,7 @@ int main(int argc, char** argv){
             lRecTree->SetBranchAddress("rechit_wafer_v" ,&rechitWaferV);
             lRecTree->SetBranchAddress("rechit_cell_u"  ,&rechitCellU);
             lRecTree->SetBranchAddress("rechit_cell_v"  ,&rechitCellV);
+            lRecTree->SetBranchAddress("rechit_thickness" ,&rechitThickness);
             lRecTree->SetBranchAddress("gen_eta"       ,&genEta);
             lRecTree->SetBranchAddress("gen_phi"       ,&genPhi);
         }
@@ -577,7 +583,7 @@ int main(int argc, char** argv){
 
         if (debug) std::cout << " - Event contains " << (*rechitEnergy).size()
         << " rechits." << std::endl;
-        double coneSize = 0.3;
+        double coneSize = 0.15;
         double rechitsum = 0;
         double rechitsumdead_Si = 0;
         double rechitsumlaypn = 0;
@@ -595,13 +601,15 @@ int main(int argc, char** argv){
             int waferV  = (*rechitWaferV)[iH];
             int cellU   = (*rechitCellU)[iH];
             int cellV   = (*rechitCellV)[iH];
+            int thickness = (*rechitThickness)[iH];
+            bool isDense = (thickness == 120) ? 1 : 0;
 
             /* Select hits that are:
             **     - in CE-E
-            **     - within DeltaR < 0.3 wrt gen particle
+            **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
-            if(layer<28 && zh > 0 && dR < coneSize) {
+            if(layer<29 && zh > 0 && dR < coneSize) {
                 rechitsum += lenergy;
                 std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
                 std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistsi.find(tempsi);
@@ -625,7 +633,7 @@ int main(int argc, char** argv){
                             (*itr)[5] = leta;
                             (*itr)[6] = lphi;
                             (*itr)[13] = lenergy;
-                            (*itr)[28] = (float)ievt;
+                            (*itr)[30] = thickness;
                         }
                     }
                 }
@@ -678,7 +686,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrNn=adj_to_dead_inlay.find(tempsiNn);
                     if(itrNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> sameLayerNeighbors;
-                        sameLayerNeighbors = getNeighbors(tempsi, denseCells);
+                        sameLayerNeighbors = getNeighbors(tempsi, isDense);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
@@ -704,7 +712,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrUNn=adj_to_dead_inlay.find(tempsiUNn);
                     if(itrUNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> nextLayerNeighbors;
-                        nextLayerNeighbors = getNeighbors(tempsi, denseCells);
+                        nextLayerNeighbors = getNeighbors(tempsi, isDense);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrUNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
@@ -730,7 +738,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_inlay.find(tempsiDNn);
                     if(itrDNn!=adj_to_dead_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> prevLayerNeighbors;
-                        prevLayerNeighbors = getNeighbors(tempsi, denseCells);
+                        prevLayerNeighbors = getNeighbors(tempsi, isDense);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrDNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
@@ -791,8 +799,9 @@ int main(int argc, char** argv){
                 MLdn4    = (*itr)[25];
                 MLdn5    = (*itr)[26];
                 MLdn6    = (*itr)[27];
-                MLevent  = (float)ievt;//(*itr)[28];
+                MLevent  = (float)event;
                 MLrechitsum = rechitsumdead_Si;
+                MLthickness = (*itr)[30];
                 t1->Fill();
             }
         }
