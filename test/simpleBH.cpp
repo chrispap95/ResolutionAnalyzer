@@ -59,9 +59,6 @@ double DeltaR(double eta1,double phi1,double eta2,double phi2){
 /* Returns a vector of tuples that describe the neighbors
 ** of the tuple that is given as the input.
 **     - offset: is 0 for low density areas and 4 for high density areas
-**     Warning: This cutoff based method is not accurate.
-**              The regions' borders start between 2.07 and 2.085 and can end
-**              up to at eta 2.3.
 */
 std::vector<std::tuple<int, int, int, int, int>> getNeighbors(
     std::tuple<int, int, int, int, int> deadCell, bool isDense)
@@ -397,7 +394,8 @@ int main(int argc, char** argv){
                             });
 
                             std::vector<std::tuple<int,int,int,int,int>> inLayerNeighbors;
-                            inLayerNeighbors = getNeighbors(deadCell, denseCells);
+                            bool isDense = (offset == 4) ? 1 : 0;
+                            inLayerNeighbors = getNeighbors(deadCell, isDense);
                             int iN = 0;
                             for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); ++itr){
                                 adj_to_dead_inlay.insert({
