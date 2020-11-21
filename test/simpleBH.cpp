@@ -591,7 +591,7 @@ int main(int argc, char** argv){
     << lRecTree->GetEntries() << std::endl;
 
     //loop on events
-    int *event = 0;
+    ULong64_t *event = 0;
     std::vector<float> *rechitEnergy = 0;
     std::vector<float> *rechitEta = 0;
     std::vector<float> *rechitPhi = 0;
