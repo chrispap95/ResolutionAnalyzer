@@ -759,6 +759,7 @@ int main(int argc, char** argv){
                     }
                 }
 
+std::cout << "Check 1" << std::endl;
                 /* Get rechits of same layer neighbors for the dead cell
                 ** and its adjacent cell neighbors.
                 */
@@ -790,6 +791,7 @@ int main(int argc, char** argv){
                         }
                     }
 
+std::cout << "Check 2" << std::endl;
                     // Next layer neighbors
                     std::tuple<int, int, int, int, int, int> tempsiUNn(
                         n,layer-1,waferU,waferV,cellU,cellV
@@ -844,6 +846,7 @@ int main(int argc, char** argv){
                 }
             }
 
+std::cout << "Check 3" << std::endl;
             /* Select hits that are:
             **     - in Scint channels
             **     - within DeltaR < 0.15 wrt gen particle
@@ -871,6 +874,7 @@ int main(int argc, char** argv){
                         }
                     }
                 }
+std::cout << "Check 4" << std::endl;
 
                 /* Get rechits for adjacent channels in neighboring layers.
                 ** If channels are also dead then assign a rechit value of -100
