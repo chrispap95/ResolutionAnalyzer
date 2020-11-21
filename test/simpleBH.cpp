@@ -177,7 +177,22 @@ std::vector<std::tuple<int, int, int>> getNeighborsScint(
   std::get<1>(n8) += 1;
   std::get<2>(n8) -= 1;
 
-  std::get<2>(n1) = std::get<2>(n1)%;
+  if (std::get<2>(n1) == 289) std::get<2>(n1) = 1;
+  if (std::get<2>(n1) == 0) std::get<2>(n1) = 288;
+  if (std::get<2>(n2) == 289) std::get<2>(n2) = 1;
+  if (std::get<2>(n2) == 0) std::get<2>(n2) = 288;
+  if (std::get<2>(n3) == 289) std::get<2>(n3) = 1;
+  if (std::get<2>(n3) == 0) std::get<2>(n3) = 288;
+  if (std::get<2>(n4) == 289) std::get<2>(n4) = 1;
+  if (std::get<2>(n4) == 0) std::get<2>(n4) = 288;
+  if (std::get<2>(n5) == 289) std::get<2>(n5) = 1;
+  if (std::get<2>(n5) == 0) std::get<2>(n5) = 288;
+  if (std::get<2>(n6) == 289) std::get<2>(n6) = 1;
+  if (std::get<2>(n6) == 0) std::get<2>(n6) = 288;
+  if (std::get<2>(n7) == 289) std::get<2>(n7) = 1;
+  if (std::get<2>(n7) == 0) std::get<2>(n7) = 288;
+  if (std::get<2>(n8) == 289) std::get<2>(n8) = 1;
+  if (std::get<2>(n8) == 0) std::get<2>(n8) = 288;
 
   neighbors.push_back(n1);
   neighbors.push_back(n2);
@@ -296,7 +311,7 @@ int main(int argc, char** argv){
     **********************************/
     float MLlayer, MLeta, MLphi, MLdead, MLnup, MLndown, MLevent;
     float MLwaferU, MLwaferV, MLcellU, MLcellV, MLieta, MLiphi;
-    float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6, MLn6, MLn8;
+    float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6, MLn7, MLn8;
     float MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6, MLdn7, MLdn8;
     float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6, MLun7, MLun8;
     float MLrechitsum, MLthickness;
@@ -527,7 +542,7 @@ int main(int argc, char** argv){
                   inLayerNeighbors = getNeighborsScint(deadChannel);
                   int iN = 0;
                   for(auto itr = inLayerNeighbors.begin(); itr!=inLayerNeighbors.end(); ++itr){
-                      adj_to_dead_Si_inlay.insert({
+                      adj_to_dead_Scint_inlay.insert({
                           iN,
                           std::get<0>(*itr),
                           std::get<1>(*itr),
@@ -985,7 +1000,7 @@ int main(int argc, char** argv){
                 MLdn5    = (*itr)[26];
                 MLdn6    = (*itr)[27];
                 MLthickness = (*itr)[28];
-                MLevent  = (float)event;
+                MLevent  = (float)(*event);
                 t1->Fill();
             }
         }
