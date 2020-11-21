@@ -676,6 +676,7 @@ int main(int argc, char** argv){
 
         // Loop over hits of event
         for (unsigned iH(0); iH < (*rechitEnergy).size(); ++iH){
+            std::cout << "Check 1" << std::endl;
             int layer = (*rechitLayer)[iH];
             double zh = (*rechitPosz)[iH];
             double lenergy = (*rechitEnergy)[iH];
@@ -683,6 +684,7 @@ int main(int argc, char** argv){
             double lphi = (*rechitPhi)[iH];
             double dR = DeltaR(etagen,phigen,leta,lphi);
 
+            std::cout << "Check 2" << std::endl;
             int waferU = (*rechitWaferU)[iH];
             int waferV = (*rechitWaferV)[iH];
             int cellU = (*rechitCellU)[iH];
@@ -699,6 +701,7 @@ int main(int argc, char** argv){
             **     - in positive endcap
             */
             if(!isScint && zh > 0 && dR < coneSize) {
+                std::cout << "Check 3" << std::endl;
                 std::tuple<int, int, int, int, int> tempsi(layer,waferU,waferV,cellU,cellV);
                 std::set<std::tuple<int, int, int, int, int>>::iterator ibc=deadlistSi.find(tempsi);
                 bool isDead = false;
@@ -711,6 +714,7 @@ int main(int argc, char** argv){
                     /* ML code
                     ** Input dead cells eta, phi and rechits
                     */
+                    std::cout << "Check 4" << std::endl;
                     isDead = true;
                     for(auto itr = MLvectorevSi.begin(); itr != MLvectorevSi.end(); itr++) {
                         if( (*itr)[0] == layer &&
