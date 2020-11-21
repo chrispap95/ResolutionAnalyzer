@@ -720,7 +720,7 @@ int main(int argc, char** argv){
                             (*itr)[5] = leta;
                             (*itr)[6] = lphi;
                             (*itr)[13] = lenergy;
-                            (*itr)[30] = thickness;
+                            (*itr)[28] = thickness;
                         }
                     }
                 }
