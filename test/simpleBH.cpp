@@ -759,7 +759,6 @@ int main(int argc, char** argv){
                     }
                 }
 
-std::cout << "Check 1" << std::endl;
                 /* Get rechits of same layer neighbors for the dead cell
                 ** and its adjacent cell neighbors.
                 */
@@ -791,7 +790,6 @@ std::cout << "Check 1" << std::endl;
                         }
                     }
 
-std::cout << "Check 2" << std::endl;
                     // Next layer neighbors
                     std::tuple<int, int, int, int, int, int> tempsiUNn(
                         n,layer-1,waferU,waferV,cellU,cellV
@@ -846,21 +844,26 @@ std::cout << "Check 2" << std::endl;
                 }
             }
 
-std::cout << "Check 3" << std::endl;
             /* Select hits that are:
             **     - in Scint channels
             **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
             if(isScint && zh > 0 && dR < coneSize) {
+std::cout << "Check 1" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
+std::cout << "Check 2" << std::endl;
                 std::set<std::tuple<int, int, int>>::iterator ibc=deadlistScint.find(tempscint);
+std::cout << "Check 3" << std::endl;
                 bool isDead = false;
 
                 // Calculate energy without dead Scint channels
+std::cout << "Check 4" << std::endl;
                 if(ibc == deadlistScint.end()) {
+std::cout << "Check 5" << std::endl;
                     MLrechitsum += lenergy;
                 }else {
+std::cout << "Check 6" << std::endl;
                     // Do stuff with dead channels
                     /* ML code
                     ** Input dead channels eta, phi and rechits
@@ -874,7 +877,7 @@ std::cout << "Check 3" << std::endl;
                         }
                     }
                 }
-std::cout << "Check 4" << std::endl;
+std::cout << "Check 7" << std::endl;
 
                 /* Get rechits for adjacent channels in neighboring layers.
                 ** If channels are also dead then assign a rechit value of -100
