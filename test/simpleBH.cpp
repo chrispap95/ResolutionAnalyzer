@@ -444,7 +444,9 @@ int main(int argc, char** argv){
                 int waferY = 2*waferV;
                 if (lr > 28) r_denseLimit = 16.3-0.2*lr;
                 if(sqrt(pow(waferX, 2)+pow(waferY, 2)) < r_denseLimit) {
-                    if(abs(waferU-waferV) == 1 | abs(waferU-waferV) == 4 | abs(waferU-waferV) == 5 | lr >40){
+                    if((abs(waferU-waferV) == 1) || (abs(waferU-waferV) == 4) ||
+                       (abs(waferU-waferV) == 5) || (lr > 40)
+                    ){
                         offset = 0;
                     } else {
                         offset = 4;
