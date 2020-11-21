@@ -850,20 +850,14 @@ int main(int argc, char** argv){
             **     - in positive endcap
             */
             if(isScint && zh > 0 && dR < coneSize) {
-std::cout << "Check 1" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
-std::cout << "Check 2" << std::endl;
                 std::set<std::tuple<int, int, int>>::iterator ibc=deadlistScint.find(tempscint);
-std::cout << "Check 3" << std::endl;
                 bool isDead = false;
 
                 // Calculate energy without dead Scint channels
-std::cout << "Check 4" << std::endl;
                 if(ibc == deadlistScint.end()) {
-std::cout << "Check 5" << std::endl;
                     MLrechitsum += lenergy;
                 }else {
-std::cout << "Check 6" << std::endl;
                     // Do stuff with dead channels
                     /* ML code
                     ** Input dead channels eta, phi and rechits
