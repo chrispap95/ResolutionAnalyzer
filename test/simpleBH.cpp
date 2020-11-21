@@ -298,8 +298,8 @@ int main(int argc, char** argv){
     float MLwaferU, MLwaferV, MLcellU, MLcellV, MLieta, MLiphi;
     float MLn1, MLn2, MLn3, MLn4, MLn5, MLn6, MLn6, MLn8;
     float MLdn1, MLdn2, MLdn3, MLdn4, MLdn5, MLdn6, MLdn7, MLdn8;
-    float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6, MLdn7, MLdn8;
-    float MLrechitsum, thickness;
+    float MLun1, MLun2, MLun3, MLun4, MLun5, MLun6, MLun7, MLun8;
+    float MLrechitsum, MLthickness;
     TTree* t1 = new TTree("t1","sample");
     t1->Branch("layer"    ,&MLlayer    ,"layer/F"    );
     t1->Branch("waferU"   ,&MLwaferU   ,"waferU/F"   );
@@ -806,7 +806,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int, int, int>>::iterator itrDNn=adj_to_dead_Si_inlay.find(tempsiDNn);
                     if(itrDNn!=adj_to_dead_Si_inlay.end()) {
                         std::vector<std::tuple<int,int,int,int,int>> prevLayerNeighbors;
-                        prevLayerNeighbors = getNeighbors(tempsi, isDense);
+                        prevLayerNeighbors = getNeighborsSi(tempsi, isDense);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrDNn)+3)%6;
                         std::tuple<int, int, int, int> deadCell;
@@ -931,7 +931,7 @@ int main(int argc, char** argv){
                     std::set<std::tuple<int, int, int, int>>::iterator itrDNn=adj_to_dead_Scint_inlay.find(tempscintDNn);
                     if(itrDNn!=adj_to_dead_Scint_inlay.end()) {
                         std::vector<std::tuple<int,int,int>> prevLayerNeighbors;
-                        prevLayerNeighbors = getNeighbors(tempscint);
+                        prevLayerNeighbors = getNeighborsScint(tempscint);
                         // Get neighbor number
                         int nn = (std::get<0>(*itrDNn)+4)%8;
                         std::tuple<int, int> deadchannel;
@@ -1026,7 +1026,7 @@ int main(int argc, char** argv){
                 MLdn6    = (*itr)[29];
                 MLdn7    = (*itr)[30];
                 MLdn8    = (*itr)[31];
-                MLevent  = (float)event;
+                MLevent  = (float)(*event);
                 t2->Fill();
             }
         }
