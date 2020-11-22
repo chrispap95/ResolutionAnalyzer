@@ -591,7 +591,7 @@ int main(int argc, char** argv){
     << lRecTree->GetEntries() << std::endl;
 
     //loop on events
-    ULong64_t *event = 0;
+    ULong64_t event = 0;
     std::vector<float> *rechitEnergy = 0;
     std::vector<float> *rechitEta = 0;
     std::vector<float> *rechitPhi = 0;
@@ -966,11 +966,9 @@ int main(int argc, char** argv){
             }
         }
 
-std::cout << "Check 1" << std::endl;
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorevSi.begin(); itr != MLvectorevSi.end(); ++itr) {
             if ((*itr)[5] > 0 || (*itr)[0]==-1) {
-std::cout << "Check 2" << std::endl;
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
                 */
@@ -1002,11 +1000,10 @@ std::cout << "Check 2" << std::endl;
                 MLdn4    = (*itr)[25];
                 MLdn5    = (*itr)[26];
                 MLdn6    = (*itr)[27];
-std::cout << "Check 3" << std::endl;
                 MLthickness = (*itr)[28];
-std::cout << "Check 4" << std::endl;
+std::cout << "Check 1" << std::endl;
                 MLevent  = (float)(event);
-std::cout << "Check 5" << std::endl;
+std::cout << "Check 2" << std::endl;
                 t1->Fill();
             }
         }
