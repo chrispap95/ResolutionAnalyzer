@@ -848,25 +848,19 @@ int main(int argc, char** argv){
             **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
-std::cout << "Check 1 " << iH << std::endl;
             if(isScint && zh > 0 && dR < coneSize) {
-std::cout << "Check 2" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
-std::cout << "Check 3" << std::endl;
                 std::set<std::tuple<int, int, int>>::iterator ibc=deadlistScint.find(tempscint);
                 bool isDead = false;
 
-std::cout << "Check 4" << std::endl;
                 // Calculate energy without dead Scint channels
                 if(ibc == deadlistScint.end()) {
-std::cout << "Check 5" << std::endl;
                     MLrechitsum += lenergy;
                 }else {
                     // Do stuff with dead channels
                     /* ML code
                     ** Input dead channels eta, phi and rechits
                     */
-std::cout << "Check 6" << std::endl;
                     isDead = true;
                     for(auto itr = MLvectorevScint.begin(); itr != MLvectorevScint.end(); itr++) {
                         if( (*itr)[0] == layer && (*itr)[1] == ieta && (*itr)[2] == iphi ){
@@ -876,7 +870,6 @@ std::cout << "Check 6" << std::endl;
                         }
                     }
                 }
-std::cout << "Check 7" << std::endl;
 
                 /* Get rechits for adjacent channels in neighboring layers.
                 ** If channels are also dead then assign a rechit value of -100
@@ -973,9 +966,11 @@ std::cout << "Check 7" << std::endl;
             }
         }
 
+std::cout << "Check 1" << std::endl;
         //Export the ML dataset values to the TTree
         for(auto itr = MLvectorevSi.begin(); itr != MLvectorevSi.end(); ++itr) {
             if ((*itr)[5] > 0 || (*itr)[0]==-1) {
+std::cout << "Check 2" << std::endl;
                 /* This condition is necessary to ensure the cell was within
                 ** the cone.
                 */
@@ -1012,6 +1007,7 @@ std::cout << "Check 7" << std::endl;
                 t1->Fill();
             }
         }
+std::cout << "Check 3" << std::endl;
         for(auto itr = MLvectorevScint.begin(); itr != MLvectorevScint.end(); ++itr) {
             if ((*itr)[3] > 0 || (*itr)[0]==-1) {
                 /* This condition is necessary to ensure the cell was within
@@ -1052,6 +1048,7 @@ std::cout << "Check 7" << std::endl;
                 MLevent  = (float)(*event);
                 t2->Fill();
             }
+std::cout << "Check 4" << std::endl;
         }
         ievtRec++;
     }
