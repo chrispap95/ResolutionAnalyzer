@@ -669,8 +669,7 @@ int main(int argc, char** argv){
             phigen = (*genPhi)[0];
         }
 
-        if (debug) std::cout << " - Event contains " << (*rechitEnergy).size()
-        << " rechits." << std::endl;
+        std::cout << " - Event contains " << (*rechitEnergy).size() << " rechits." << std::endl;
         double coneSize = 0.15;
         MLrechitsum = 0;
 
@@ -849,7 +848,7 @@ int main(int argc, char** argv){
             **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
-std::cout << "Check 1" << std::endl;
+std::cout << "Check 1 " << iH << std::endl;
             if(isScint && zh > 0 && dR < coneSize) {
 std::cout << "Check 2" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
