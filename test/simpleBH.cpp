@@ -1002,12 +1002,14 @@ std::cout << "Check 2" << std::endl;
                 MLdn4    = (*itr)[25];
                 MLdn5    = (*itr)[26];
                 MLdn6    = (*itr)[27];
+std::cout << "Check 3" << std::endl;
                 MLthickness = (*itr)[28];
+std::cout << "Check 4" << std::endl;
                 MLevent  = (float)(*event);
+std::cout << "Check 5" << std::endl;
                 t1->Fill();
             }
         }
-std::cout << "Check 3" << std::endl;
         for(auto itr = MLvectorevScint.begin(); itr != MLvectorevScint.end(); ++itr) {
             if ((*itr)[3] > 0 || (*itr)[0]==-1) {
                 /* This condition is necessary to ensure the cell was within
@@ -1048,7 +1050,6 @@ std::cout << "Check 3" << std::endl;
                 MLevent  = (float)(*event);
                 t2->Fill();
             }
-std::cout << "Check 4" << std::endl;
         }
         ievtRec++;
     }
