@@ -854,14 +854,17 @@ int main(int argc, char** argv){
                 std::set<std::tuple<int, int, int>>::iterator ibc=deadlistScint.find(tempscint);
                 bool isDead = false;
 
+std::cout << "Check 1" << std::endl;
                 // Calculate energy without dead Scint channels
                 if(ibc == deadlistScint.end()) {
+std::cout << "Check 2" << std::endl;
                     MLrechitsum += lenergy;
                 }else {
                     // Do stuff with dead channels
                     /* ML code
                     ** Input dead channels eta, phi and rechits
                     */
+std::cout << "Check 3" << std::endl;
                     isDead = true;
                     for(auto itr = MLvectorevScint.begin(); itr != MLvectorevScint.end(); itr++) {
                         if( (*itr)[0] == layer && (*itr)[1] == ieta && (*itr)[2] == iphi ){
@@ -871,7 +874,7 @@ int main(int argc, char** argv){
                         }
                     }
                 }
-std::cout << "Check 7" << std::endl;
+std::cout << "Check 4" << std::endl;
 
                 /* Get rechits for adjacent channels in neighboring layers.
                 ** If channels are also dead then assign a rechit value of -100
