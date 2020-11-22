@@ -669,7 +669,6 @@ int main(int argc, char** argv){
             phigen = (*genPhi)[0];
         }
 
-        std::cout << " - Event contains " << (*rechitEnergy).size() << " rechits." << std::endl;
         double coneSize = 0.15;
         MLrechitsum = 0;
 
@@ -1001,9 +1000,7 @@ int main(int argc, char** argv){
                 MLdn5    = (*itr)[26];
                 MLdn6    = (*itr)[27];
                 MLthickness = (*itr)[28];
-std::cout << "Check 1" << std::endl;
                 MLevent  = (float)(event);
-std::cout << "Check 2" << std::endl;
                 t1->Fill();
             }
         }
