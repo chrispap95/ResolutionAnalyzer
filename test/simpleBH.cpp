@@ -1005,7 +1005,7 @@ std::cout << "Check 2" << std::endl;
 std::cout << "Check 3" << std::endl;
                 MLthickness = (*itr)[28];
 std::cout << "Check 4" << std::endl;
-                MLevent  = (float)(*event);
+                MLevent  = (float)(event);
 std::cout << "Check 5" << std::endl;
                 t1->Fill();
             }
@@ -1047,7 +1047,7 @@ std::cout << "Check 5" << std::endl;
                 MLdn6    = (*itr)[29];
                 MLdn7    = (*itr)[30];
                 MLdn8    = (*itr)[31];
-                MLevent  = (float)(*event);
+                MLevent  = (float)(event);
                 t2->Fill();
             }
         }
