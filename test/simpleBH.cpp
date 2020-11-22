@@ -423,8 +423,10 @@ int main(int argc, char** argv){
     std::set<std::tuple<int, int, int, int>> adj_to_dead_Scint_inlay;
 
     // Kill cells and calculate statistics on adjacent dead cells
-    unsigned N_try_success = 0; // Number of killed cells
-    unsigned N_try_all = 0; // Number of trials to kill cells
+    unsigned N_try_success_Si = 0; // Number of killed cells
+    unsigned N_try_all_Si = 0; // Number of trials to kill cells
+    unsigned N_try_success_Scint = 0; // Number of killed cells
+    unsigned N_try_all_Scint = 0; // Number of trials to kill cells
     /*
     float N_cluster2 = 0; // Number of dead cells clusters (n_dead = 2)
     float N_clusters = 0; // Number of dead cells clusters (n_dead > 2)
@@ -456,9 +458,9 @@ int main(int argc, char** argv){
                 }
                 for(int cellU = 0; cellU < 16+2*offset; ++cellU) {
                     for(int cellV = 0; cellV < 16+2*offset; ++cellV) {
-                        N_try_all++;
+                        N_try_all_Si++;
                         if(r.Rndm() < deadfrac){
-                            N_try_success++;
+                            N_try_success_Si++;
                             std::tuple<int,int,int,int,int> deadCell(
                                 lr,
                                 waferU,
@@ -519,7 +521,9 @@ int main(int argc, char** argv){
     for(int lr = 37; lr < 51; ++lr) {
         for(int ie = 10; ie < 40; ++ie) {
             for(int ip = 1; ip < 289; ++ip) {
+                N_try_all_Scint++;
                 if(r.Rndm() < deadfrac) {
+                    N_try_success_Scint++;
                     std::tuple<int,int,int> deadChannel(
                         lr,
                         ie,
@@ -575,8 +579,9 @@ int main(int argc, char** argv){
     for(unsigned k(0); k < 32; ++k) buffer_vector_Scint[k] = -1;
     MLvectorevScint.push_back(buffer_vector_Scint);
 
-    std::cout << "List of dead Si cells was created successfully. \n"
-    << "Killed " << N_try_success << " cells using " << N_try_all << " trials.\n"
+    std::cout << "List of dead Si cells and scintillator channels was created successfully. \n"
+    << "Killed " << N_try_success_Si << " Si cells using " << N_try_all_Si << " trials\n"
+    << "and " << N_try_success_Scint << " scintillator channels using " << N_try_all_Scint << " trials.\n"
     << std::endl;
 
     /**********************************
@@ -856,6 +861,7 @@ int main(int argc, char** argv){
                 if(ibc == deadlistScint.end()) {
                     MLrechitsum += lenergy;
                 }else {
+                    std::cout << "Check 1" << std::endl;
                     // Do stuff with dead channels
                     /* ML code
                     ** Input dead channels eta, phi and rechits
