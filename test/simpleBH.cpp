@@ -852,12 +852,15 @@ int main(int argc, char** argv){
             **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
+            std::cout << "Check 1" << std::endl;
             if(isScint && zh > 0 && dR < coneSize) {
+                std::cout << "Check 2" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
+                std::cout << "Check 3" << std::endl;
                 std::set<std::tuple<int, int, int>>::iterator ibc=deadlistScint.find(tempscint);
                 bool isDead = false;
 
-                std::cout << "Check 1: ieta = " << ieta << ", iphi = " << iphi << std::endl;
+                std::cout << "Check 4: ieta = " << ieta << ", iphi = " << iphi << std::endl;
                 // Calculate energy without dead Scint channels
                 if(ibc == deadlistScint.end()) {
                     MLrechitsum += lenergy;
