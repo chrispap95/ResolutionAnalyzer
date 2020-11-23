@@ -694,7 +694,7 @@ int main(int argc, char** argv){
             int thickness = (*rechitThickness)[iH];
             if (ievt == 1 && thickness > 150) std::cout << thickness << std::endl;
             bool isDense = (thickness == 120) ? 1 : 0;
-            bool isScint = (thickness > 400) ? 1 : 0;
+            bool isScint = (thickness != 120 && thickness != 200 && thickness != 300) ? 1 : 0;
             int ieta = (isScint) ? waferU : std::numeric_limits<int>::max();
             int iphi = (isScint) ? waferV : std::numeric_limits<int>::max();
 
