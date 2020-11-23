@@ -692,7 +692,7 @@ int main(int argc, char** argv){
             int cellU = (*rechitCellU)[iH];
             int cellV = (*rechitCellV)[iH];
             int thickness = (*rechitThickness)[iH];
-            if (thickness > 400) std::cout << "is scintillator!!!" << std::endl;
+            if (ievt == 1) std::cout << thickness << std::endl;
             bool isDense = (thickness == 120) ? 1 : 0;
             bool isScint = (thickness > 400) ? 1 : 0;
             int ieta = (isScint) ? waferU : std::numeric_limits<int>::max();
