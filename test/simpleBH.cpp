@@ -691,6 +691,7 @@ int main(int argc, char** argv){
             int cellU = (*rechitCellU)[iH];
             int cellV = (*rechitCellV)[iH];
             int thickness = (*rechitThickness)[iH];
+            if (thickness > 400) std::cout << "is scintillator!!!" << std::endl;
             bool isDense = (thickness == 120) ? 1 : 0;
             bool isScint = (thickness > 400) ? 1 : 0;
             int ieta = (isScint) ? waferU : std::numeric_limits<int>::max();
@@ -852,7 +853,7 @@ int main(int argc, char** argv){
             **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
-            std::cout << "Check 1: isScint = " << isScint << ", zh = " << zh << ", dR = " << dR << std::endl;
+            //if (ievt==1) std::cout << "Check 1: isScint = " << isScint << ", zh = " << zh << ", dR = " << dR << std::endl;
             if(isScint && zh > 0 && dR < coneSize) {
                 std::cout << "Check 2" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
