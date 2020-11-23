@@ -274,7 +274,6 @@ int main(int argc, char** argv){
             std::ostringstream lstrrec;
             lstrrec << inputrec.str() << "_" << i << ".root";
             lRecTree->AddFile(lstrrec.str().c_str());
-            std::cout << "Opening file: " << lstrrec.str() << std::endl;
         }
     }
 
@@ -644,8 +643,7 @@ int main(int argc, char** argv){
         if (ievtRec>=lRecTree->GetEntries()) continue;
         Long64_t local_entry = lRecTree->LoadTree(ievt);
 
-        if (debug) std::cout << std::endl<<std::endl << "... Processing entry: " << ievt << std::endl;
-        else if (ievt%50 == 0) std::cout << "... Processing entry: " << ievt << std::endl;
+        if (ievt%50 == 0) std::cout << "... Processing entry: " << ievt << std::endl;
 
         if (local_entry < 0) continue;
         if (local_entry == 0) {
@@ -692,7 +690,6 @@ int main(int argc, char** argv){
             int cellU = (*rechitCellU)[iH];
             int cellV = (*rechitCellV)[iH];
             int thickness = (*rechitThickness)[iH];
-            if (ievt == 1 && thickness > 150) std::cout << thickness << std::endl;
             bool isDense = (thickness == 120) ? 1 : 0;
             bool isScint = (thickness != 120 && thickness != 200 && thickness != 300) ? 1 : 0;
             int ieta = (isScint) ? waferU : std::numeric_limits<int>::max();
@@ -854,20 +851,15 @@ int main(int argc, char** argv){
             **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
-            //if (ievt==1) std::cout << "Check 1: isScint = " << isScint << ", zh = " << zh << ", dR = " << dR << std::endl;
             if(isScint && zh > 0 && dR < coneSize) {
-                std::cout << "Check 2" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
-                std::cout << "Check 3" << std::endl;
                 std::set<std::tuple<int, int, int>>::iterator ibc=deadlistScint.find(tempscint);
                 bool isDead = false;
 
-                std::cout << "Check 4: ieta = " << ieta << ", iphi = " << iphi << std::endl;
                 // Calculate energy without dead Scint channels
                 if(ibc == deadlistScint.end()) {
                     MLrechitsum += lenergy;
                 }else {
-                    std::cout << "Check 2" << std::endl;
                     // Do stuff with dead channels
                     /* ML code
                     ** Input dead channels eta, phi and rechits
