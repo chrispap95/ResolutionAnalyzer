@@ -852,7 +852,7 @@ int main(int argc, char** argv){
             **     - within DeltaR < 0.15 wrt gen particle
             **     - in positive endcap
             */
-            std::cout << "Check 1" << std::endl;
+            std::cout << "Check 1: isScint = " << isScint << ", zh = " << zh << ", dR = " << dR << std::endl;
             if(isScint && zh > 0 && dR < coneSize) {
                 std::cout << "Check 2" << std::endl;
                 std::tuple<int, int, int> tempscint(layer,ieta,iphi);
