@@ -274,6 +274,7 @@ int main(int argc, char** argv){
             std::ostringstream lstrrec;
             lstrrec << inputrec.str() << "_" << i << ".root";
             lRecTree->AddFile(lstrrec.str().c_str());
+            std::cout << "Opening file: " << lstrrec.str() << std::endl;
         }
     }
 
