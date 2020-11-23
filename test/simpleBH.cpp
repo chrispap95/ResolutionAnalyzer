@@ -857,11 +857,12 @@ int main(int argc, char** argv){
                 std::set<std::tuple<int, int, int>>::iterator ibc=deadlistScint.find(tempscint);
                 bool isDead = false;
 
+                std::cout << "Check 1: ieta = " << ieta << ", iphi = " << iphi << std::endl;
                 // Calculate energy without dead Scint channels
                 if(ibc == deadlistScint.end()) {
                     MLrechitsum += lenergy;
                 }else {
-                    std::cout << "Check 1" << std::endl;
+                    std::cout << "Check 2" << std::endl;
                     // Do stuff with dead channels
                     /* ML code
                     ** Input dead channels eta, phi and rechits
