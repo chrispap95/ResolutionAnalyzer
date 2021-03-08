@@ -519,8 +519,8 @@ int main(int argc, char** argv){
     }
 
     for(int lr = 37; lr < 51; ++lr) {
-        for(int ie = 10; ie < 40; ++ie) {
-            for(int ip = 1; ip < 289; ++ip) {
+        for(int ie = 1; ie < 43; ++ie) {
+            for(int ip = 1; ip < 361; ++ip) {
                 N_try_all_Scint++;
                 if(r.Rndm() < deadfrac) {
                     N_try_success_Scint++;
