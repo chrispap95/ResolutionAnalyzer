@@ -911,7 +911,7 @@ int main(int argc, char** argv){
                         std::tuple<int, int> deadchannel;
                         std::get<0>(deadchannel) = std::get<1>(prevLayerNeighbors[nn]);
                         std::get<1>(deadchannel) = std::get<2>(prevLayerNeighbors[nn]);
-                        for(auto itr = MLvectorevScint.begin(); itr != MLvectorevScint.end(); itr++) {
+                        for(auto itr = MLvectorev.begin(); itr != MLvectorev.end(); itr++) {
                             if( (*itr)[0] == layer+1 && (*itr)[5] == std::get<0>(deadchannel) &&
                                 (*itr)[6] == std::get<1>(deadchannel)
                             ){
