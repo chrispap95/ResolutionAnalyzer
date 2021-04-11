@@ -49,7 +49,7 @@ SRCS=$(wildcard $(BASEDIR)/src/*.cc)
 EXES=$(wildcard $(BASEDIR)/test/*.cpp)
 OBJS=$(subst $(SRCDIR), $(OBJDIR),$(subst cc,$(OBJ_EXT),$(SRCS)))
 
-BINS=$(EXEDIR)/simpleBH
+BINS=$(EXEDIR)/simpleBH $(EXEDIR)/simpleBH_barebone
 
 .PHONY: all
 all: lib $(BINS)
@@ -61,6 +61,9 @@ docs: all
 #	$(CXX) -o $@ $(CXXFLAGS) $< $(LIBS) -L$(LIBDIR) -l$(LIBNAME)
 
 $(EXEDIR)/simpleBH:  $(TESTDIR)/simpleBH.cpp $(LIBDIR)/lib$(LIBNAME).so $(wildcard $(BASEDIR)/include/*.h*)
+	$(CXX) -o $@ $(CXXFLAGS) $< $(LIBS) -L$(LIBDIR) -l$(LIBNAME)
+
+$(EXEDIR)/simpleBH_barebone:  $(TESTDIR)/simpleBH_barebone.cpp $(LIBDIR)/lib$(LIBNAME).so $(wildcard $(BASEDIR)/include/*.h*)
 	$(CXX) -o $@ $(CXXFLAGS) $< $(LIBS) -L$(LIBDIR) -l$(LIBNAME)
 
 $(OBJDIR)/%.$(OBJ_EXT):  $(SRCDIR)/%.cc $(BASEDIR)/include/%.h*
