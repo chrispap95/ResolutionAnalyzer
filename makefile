@@ -49,7 +49,7 @@ SRCS=$(wildcard $(BASEDIR)/src/*.cc)
 EXES=$(wildcard $(BASEDIR)/test/*.cpp)
 OBJS=$(subst $(SRCDIR), $(OBJDIR),$(subst cc,$(OBJ_EXT),$(SRCS)))
 
-BINS=$(EXEDIR)/simpleBH
+BINS=$(EXEDIR)/simpleBH $(EXEDIR)/simpleBH_barebone
 
 .PHONY: all
 all: lib $(BINS)
